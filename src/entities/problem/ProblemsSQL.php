@@ -14,6 +14,7 @@ use yii\db\Exception;
 use yii\db\StaleObjectException;
 use yii\di\NotInstantiableException;
 use yii\helpers\VarDumper;
+use yii\web\NotFoundHttpException;
 
 class ProblemsSQL implements EntitiesList
 {
@@ -40,7 +41,10 @@ class ProblemsSQL implements EntitiesList
         if ($record) {
             return new ProblemSQL($record->id);
         }
-        return new NullProblem(['problem' => 'Проблема не найдена.']);
+        $exception = new NotFoundHttpException('Проблема не найдена');
+        return new NullProblem([
+            $exception->getName() => [$exception->getMessage()]
+        ]);
     }
 
     /**

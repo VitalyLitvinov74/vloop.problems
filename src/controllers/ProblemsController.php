@@ -41,6 +41,7 @@ class ProblemsController extends Controller
         return $behaviors;
     }
 
+    //+
     public function actionProblems()
     {
         $problems = new RestEntities(
@@ -50,6 +51,7 @@ class ProblemsController extends Controller
         return $problems->all();
     }
 
+    //+
     public function actionProblem($id)
     {
         $problems = new RestEntities(
@@ -61,6 +63,7 @@ class ProblemsController extends Controller
             ->printYourself();
     }
 
+    //+
     public function actionAddProblem()
     {
         $problems =
@@ -72,6 +75,7 @@ class ProblemsController extends Controller
             ->addFromInput(new AddProblemForm())
             ->printYourself();
     }
+
 
     public function actionChangeStatus()
     {

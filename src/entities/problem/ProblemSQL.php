@@ -15,6 +15,7 @@ class ProblemSQL implements Problem
 {
 
     private $id;
+    private $record = false;
 
     public function __construct(int $id) {
         $this->id = $id;
@@ -29,8 +30,6 @@ class ProblemSQL implements Problem
     {
         return $this->record()->toArray();
     }
-
-    private $record = false;
 
     /**
      * @return null|array|bool|TableProblems|\yii\db\ActiveRecord

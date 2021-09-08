@@ -10,6 +10,7 @@ use vloop\problems\entities\interfaces\Role;
 use vloop\problems\entities\report\NullReport;
 use vloop\problems\tables\TableProblems;
 use vloop\problems\tables\TableProblemsUsers;
+use yii\helpers\VarDumper;
 
 class ProblemSQL implements Problem
 {
@@ -44,7 +45,15 @@ class ProblemSQL implements Problem
 
     public function changeLineData(Form $form): Entity
     {
-        return new NullReport([]);
+        $record = $this->record();
+        $fields = $form->validatedFields();
+        if($fields){
+            VarDumper::dump($form);
+            $record->load($form->validatedFields(), '');
+            VarDumper::dump($record);
+        }
+
+        return new NullProblem($form->errors());
     }
 
     public function notNull(): bool

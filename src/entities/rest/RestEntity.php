@@ -82,7 +82,8 @@ class RestEntity implements Entity
 
     public function changeLineData(Form $form): Entity
     {
-        return $this->origin->changeLineData($form);
+        $this->origin = $this->origin->changeLineData($form);
+        return $this;
     }
 
     public function notNull(): bool

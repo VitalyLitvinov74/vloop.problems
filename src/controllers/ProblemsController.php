@@ -79,10 +79,14 @@ class ProblemsController extends Controller
 
     public function actionChangeStatus()
     {
-        $problem = new ProblemByCriteriaForm(
-            new ProblemsSQL(),
-            new CriteriaIDEntity()
-        );
+        $problem =
+            new RestEntity(
+                new ProblemByCriteriaForm( //не очевидное использование ProblemSQL
+                    new ProblemsSQL(),
+                    new CriteriaIDEntity()
+                ),
+                'problem'
+            );
         return $problem
             ->changeLineData(new ChangeStatusProblemForm())
             ->printYourself();

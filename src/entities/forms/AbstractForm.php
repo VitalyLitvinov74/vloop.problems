@@ -14,13 +14,7 @@ abstract class AbstractForm extends Model implements Form
 
     public function errors(): array
     {
-        $new = [];
-        foreach ($this->errors as $attribute => $attributeErrors) {
-            foreach ($attributeErrors as $concreteError) {
-                $new[$attribute] = $concreteError;
-            }
-        }
-        return $new;
+        return $this->getErrors();
     }
 
     public function validatedFields(): array

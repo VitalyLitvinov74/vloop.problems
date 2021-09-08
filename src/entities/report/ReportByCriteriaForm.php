@@ -4,11 +4,11 @@
 namespace vloop\problems\entities\report;
 
 
-use vloop\problems\entities\interfaces\EntitiesList;
-use vloop\problems\entities\interfaces\Entity;
-use vloop\problems\entities\interfaces\Form;
-use vloop\problems\entities\interfaces\Problem;
-use vloop\problems\entities\interfaces\Report;
+use vloop\problems\entities\abstractions\Entities;
+use vloop\problems\entities\abstractions\Entity;
+use vloop\problems\entities\abstractions\Form;
+use vloop\problems\entities\abstractions\Problem;
+use vloop\problems\entities\abstractions\Report;
 use vloop\problems\tables\TableReports;
 
 class ReportByCriteriaForm implements Report
@@ -18,10 +18,10 @@ class ReportByCriteriaForm implements Report
     private $needleFindBy;
 
     /**
-     * @param ReportsSQL|EntitiesList $list - список отчетов
+     * @param ReportsSQL|Entities $list - список отчетов
      * @param Form $form - входные данные с критериями поиска
      */
-    public function __construct(EntitiesList $list, Form $form)
+    public function __construct(Entities $list, Form $form)
     {
         $this->list = $list;
         $this->form = $form;

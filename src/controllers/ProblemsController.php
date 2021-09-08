@@ -12,7 +12,7 @@ use vloop\problems\entities\forms\inputed\InputsForChangeReport;
 use vloop\problems\entities\problem\decorators\ProblemByForm;
 use vloop\problems\entities\problem\decorators\ProblemsByDates;
 use vloop\problems\entities\problem\decorators\RestProblem;
-use vloop\problems\entities\problem\ProblemByCriteriaForm;
+use vloop\problems\entities\problem\ProblemsByCriteriaForm;
 use vloop\problems\entities\problem\ProblemsSQL;
 use vloop\problems\entities\report\ReportByCriteriaForm;
 use vloop\problems\entities\report\ReportSQL;
@@ -41,7 +41,6 @@ class ProblemsController extends Controller
         return $behaviors;
     }
 
-    //+
     public function actionProblems()
     {
         $problems = new RestEntities(
@@ -51,7 +50,7 @@ class ProblemsController extends Controller
         return $problems->all();
     }
 
-    //+
+
     public function actionProblem($id)
     {
         $problems = new RestEntities(
@@ -63,7 +62,6 @@ class ProblemsController extends Controller
             ->printYourself();
     }
 
-    //+
     public function actionAddProblem()
     {
         $problems =
@@ -81,7 +79,7 @@ class ProblemsController extends Controller
     {
         $problem =
             new RestEntity(
-                new ProblemByCriteriaForm( //не очевидное использование ProblemSQL
+                new ProblemsByCriteriaForm( //не очевидное использование ProblemSQL
                     new ProblemsSQL(),
                     new CriteriaIDEntity()
                 ),

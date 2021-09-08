@@ -1,7 +1,7 @@
 <?php
 
 
-namespace vloop\problems\entities\interfaces;
+namespace vloop\problems\entities\abstractions;
 
 
 interface Report extends Entity

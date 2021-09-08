@@ -4,8 +4,8 @@
 namespace vloop\problems\entities\report;
 
 
-use vloop\problems\entities\interfaces\Problem;
-use vloop\problems\entities\interfaces\Report;
+use vloop\problems\entities\abstractions\Problem;
+use vloop\problems\entities\abstractions\Report;
 
 class NullReport implements Report
 {

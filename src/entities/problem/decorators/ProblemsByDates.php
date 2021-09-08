@@ -4,23 +4,23 @@
 namespace vloop\problems\entities\problem\decorators;
 
 
-use vloop\problems\entities\interfaces\EntitiesList;
-use vloop\problems\entities\interfaces\Entity;
-use vloop\problems\entities\interfaces\Form;
-use vloop\problems\entities\interfaces\Problem;
+use vloop\problems\entities\abstractions\Entities;
+use vloop\problems\entities\abstractions\Entity;
+use vloop\problems\entities\abstractions\Form;
+use vloop\problems\entities\abstractions\Problem;
 use vloop\problems\tables\TableProblems;
 
-class ProblemsByDates implements EntitiesList
+class ProblemsByDates implements Entities
 {
     private $origin;
     private $dateForm;
 
     /**
      * ProblemsByDates constructor.
-     * @param EntitiesList $origin - первоначаьлный список
+     * @param Entities $origin - первоначаьлный список
      * @param Form $dateForm - форма в которую были переданы данные
      */
-    public function __construct(EntitiesList $origin, Form $dateForm) {
+    public function __construct(Entities $origin, Form $dateForm) {
         $this->dateForm = $dateForm;
         $this->origin = $origin;
     }

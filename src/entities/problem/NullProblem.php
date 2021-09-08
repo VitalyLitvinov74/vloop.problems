@@ -4,10 +4,10 @@
 namespace vloop\problems\entities\problem;
 
 
-use vloop\problems\entities\interfaces\Entity;
-use vloop\problems\entities\interfaces\Form;
-use vloop\problems\entities\interfaces\Problem;
-use vloop\problems\entities\interfaces\Role;
+use vloop\problems\entities\abstractions\Entity;
+use vloop\problems\entities\abstractions\Form;
+use vloop\problems\entities\abstractions\Problem;
+use vloop\problems\entities\abstractions\Role;
 
 class NullProblem implements Problem
 {

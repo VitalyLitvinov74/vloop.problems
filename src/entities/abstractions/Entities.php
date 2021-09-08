@@ -1,10 +1,10 @@
 <?php
 
 
-namespace vloop\problems\entities\interfaces;
+namespace vloop\problems\entities\abstractions;
 
 
-interface EntitiesList
+interface Entities extends \Iterator
 {
     /**
      * @return Entity[]
@@ -16,8 +16,6 @@ interface EntitiesList
      * @return Entity - Проблема которую нужно решить
      */
     public function addFromInput(Form $form): Entity;
-
-    public function oneByCriteria(array $criteria): Entity;
 
     public function remove(Entity $entity): bool ;
 }

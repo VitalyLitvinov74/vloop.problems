@@ -4,8 +4,8 @@
 namespace vloop\problems\entities\rest;
 
 
-use vloop\problems\entities\interfaces\Entity;
-use vloop\problems\entities\interfaces\Form;
+use vloop\problems\entities\abstractions\Entity;
+use vloop\problems\entities\abstractions\Form;
 use yii\helpers\VarDumper;
 
 class RestEntity implements Entity

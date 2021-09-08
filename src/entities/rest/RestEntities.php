@@ -4,18 +4,18 @@
 namespace vloop\problems\entities\rest;
 
 
-use vloop\problems\entities\interfaces\EntitiesList;
-use vloop\problems\entities\interfaces\Entity;
-use vloop\problems\entities\interfaces\Form;
+use vloop\problems\entities\abstractions\Entities;
+use vloop\problems\entities\abstractions\Entity;
+use vloop\problems\entities\abstractions\Form;
 use yii\helpers\VarDumper;
 
-class RestEntities implements EntitiesList
+class RestEntities implements Entities
 {
     private $origType;
     private $origin;
     private $needleField;
 
-    public function __construct(EntitiesList $entitiesList,string $entityType, array $needleFields = []) {
+    public function __construct(Entities $entitiesList, string $entityType, array $needleFields = []) {
         $this->needleField = $needleFields;
         $this->origin = $entitiesList;
         $this->origType = $entityType;
@@ -49,14 +49,6 @@ class RestEntities implements EntitiesList
     {
         return new RestEntity(
             $this->origin->addFromInput($form),
-            $this->origType
-        );
-    }
-
-    public function oneByCriteria(array $criteria): Entity
-    {
-        return new RestEntity(
-            $this->origin->oneByCriteria($criteria),
             $this->origType
         );
     }

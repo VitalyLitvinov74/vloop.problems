@@ -4,7 +4,7 @@
 namespace vloop\problems\entities\problem\roles;
 
 
-use vloop\problems\entities\interfaces\Role;
+use vloop\problems\entities\abstractions\Role;
 
 class Foreman implements Role
 {

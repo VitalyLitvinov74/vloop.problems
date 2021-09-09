@@ -4,12 +4,12 @@
 namespace vloop\problems\entities\problem;
 
 
+use vloop\problems\entities\abstractions\contracts\Entity;
+use vloop\problems\entities\abstractions\contracts\Form;
+use vloop\problems\entities\abstractions\contracts\Problem;
+use vloop\problems\entities\abstractions\contracts\Entities;
 use vloop\problems\entities\abstractions\EntitiesCollection;
-use vloop\problems\entities\abstractions\Entity;
-use vloop\problems\entities\abstractions\Form;
-use vloop\problems\entities\abstractions\Problem;
-use vloop\problems\entities\abstractions\Entities;
-use vloop\problems\entities\NullEntity;
+use vloop\problems\entities\ErrorsByEntity;
 use vloop\problems\tables\TableProblems;
 use yii\base\Model;
 use yii\db\Exception;
@@ -31,6 +31,11 @@ class ProblemsSQL extends EntitiesCollection
         foreach ($all as $item) {
             $entities[] = new ProblemSQL($item->id);
         }
+        if (!$entities) {
+            $entities[] = new ErrorsByEntity([
+                "Not Found" => 'Не найдены проблемы'
+            ]);
+        }
         return $entities;
     }
 
@@ -44,29 +49,26 @@ class ProblemsSQL extends EntitiesCollection
         if ($fields) {
             $record = new TableProblems($fields);
             try {
-                if($record->save()){
+                if ($record->save()) {
                     return new ProblemSQL($record->id);
-                }else{
-                    return new NullEntity($record->errors);
+                } else {
+                    return new ErrorsByEntity($record->getErrors());
                 }
             } catch (StaleObjectException $e) {
-                return new NullEntity([
-                    'title'=>$e->getName(),
-                    'message'=>$e->getMessage()
+                return new ErrorsByEntity([
+                    $e->getName() => $e->getMessage()
                 ]);
             } catch (Exception $e) {
-                return new NullEntity([
-                    'title' => $e->getName(),
-                    'message' => $e->getMessage()
+                return new ErrorsByEntity([
+                    $e->getName() => $e->getMessage()
                 ]);
-            } catch (NotInstantiableException $e){
-                return new NullEntity([
-                    'title'=> $e->getName(),
-                    'message'=>$e->getMessage()
+            } catch (NotInstantiableException $e) {
+                return new ErrorsByEntity([
+                    $e->getName() => $e->getMessage()
                 ]);
             }
         }
-        return new NullEntity($form->errors());
+        return new ErrorsByEntity($form->errors());
     }
 
     public function remove(Entity $entity): bool

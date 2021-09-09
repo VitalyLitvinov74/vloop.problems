@@ -4,13 +4,13 @@
 namespace vloop\problems\entities\problem\decorators;
 
 
-use vloop\problems\entities\abstractions\Entities;
+use vloop\problems\entities\abstractions\contracts\Entities;
+use vloop\problems\entities\abstractions\contracts\Entity;
+use vloop\problems\entities\abstractions\contracts\Form;
+use vloop\problems\entities\abstractions\contracts\Problem;
+use vloop\problems\entities\abstractions\contracts\Role;
 use vloop\problems\entities\abstractions\EntitiesCollection;
-use vloop\problems\entities\abstractions\Entity;
-use vloop\problems\entities\abstractions\Form;
-use vloop\problems\entities\abstractions\Problem;
-use vloop\problems\entities\abstractions\Role;
-use vloop\problems\entities\problem\NullProblem;
+use vloop\problems\entities\ErrorsByEntity;
 use vloop\problems\entities\problem\ProblemSQL;
 use vloop\problems\tables\TableProblems;
 use yii\helpers\VarDumper;
@@ -35,7 +35,7 @@ class ProblemsByCriteriaForm extends EntitiesCollection
             $all = TableProblems::find()->where($fields)->all();
             return $this->entities($all);
         }
-        return [];
+        return [new ErrorsByEntity($this->form->errors())];
     }
 
     /**

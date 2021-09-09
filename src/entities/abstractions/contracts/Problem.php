@@ -1,7 +1,7 @@
 <?php
 
 
-namespace vloop\problems\entities\abstractions;
+namespace vloop\problems\entities\abstractions\contracts;
 
 
 interface Problem extends Entity

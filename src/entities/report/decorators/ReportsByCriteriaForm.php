@@ -1,26 +1,24 @@
 <?php
 
 
-namespace vloop\problems\entities\cache;
+namespace vloop\problems\entities\report\decorators;
 
 
 use vloop\problems\entities\abstractions\contracts\Entities;
+use vloop\problems\entities\abstractions\contracts\EntitiesCollection;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
-use vloop\problems\entities\abstractions\EntitiesCollection;
-use yii\helpers\VarDumper;
+use vloop\problems\entities\ErrorsByEntity;
+use vloop\problems\tables\TableReports;
 
-/**
- * Декоратор, который может кешировать работу коллекций.
- */
-class CachedEntities extends EntitiesCollection
+class ReportsByCriteriaForm extends EntitiesCollection
 {
-
+    private $form;
     private $origin;
 
-    public function __construct(Entities $origin)
-    {
+    public function __construct(Entities $origin, Form $form) {
         $this->origin = $origin;
+        $this->form = $form;
     }
 
     /**
@@ -28,13 +26,11 @@ class CachedEntities extends EntitiesCollection
      */
     public function list(): array
     {
-        /**@var array $list */
-        static $list = false;
-        if ($list !== false) {
-            return $list;
+        $fiends = $this->form->validatedFields();
+        if($fiends){
+            TableReports::find()->where($fiends)->all();
         }
-        $list = $this->origin->list();
-        return $list;
+        return [new ErrorsByEntity($this->form->errors())];
     }
 
     /**
@@ -43,11 +39,11 @@ class CachedEntities extends EntitiesCollection
      */
     public function addFromInput(Form $form): Entity
     {
-        return $this->origin->addFromInput($form);
+        // TODO: Implement addFromInput() method.
     }
 
     public function remove(Entity $entity): bool
     {
-        return $this->origin->remove($entity);
+        // TODO: Implement remove() method.
     }
 }

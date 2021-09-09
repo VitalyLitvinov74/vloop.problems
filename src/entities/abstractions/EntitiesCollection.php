@@ -4,7 +4,9 @@
 namespace vloop\problems\entities\abstractions;
 
 
-use vloop\problems\entities\NullEntity;
+use vloop\problems\entities\abstractions\contracts\Entities;
+use vloop\problems\entities\abstractions\contracts\Entity;
+use vloop\problems\entities\ErrorsByEntity;
 
 abstract class EntitiesCollection implements Entities
 {
@@ -13,7 +15,7 @@ abstract class EntitiesCollection implements Entities
     /**
      * Return the current element
      * @link https://php.net/manual/en/iterator.current.php
-     * @return mixed Can return any type.
+     * @return Entity
      * @since 5.0.0
      */
     public function current()
@@ -21,7 +23,7 @@ abstract class EntitiesCollection implements Entities
         if($this->valid()){
             return $this->list()[$this->position];
         }
-        return new NullEntity(["Not Found"=>["Проблема не найдена."]]);
+        return new ErrorsByEntity(["Not Found"=>"Сущность не найдена."]);
     }
 
     /**

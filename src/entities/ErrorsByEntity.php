@@ -4,12 +4,16 @@
 namespace vloop\problems\entities;
 
 
-use vloop\problems\entities\abstractions\Entity;
-use vloop\problems\entities\abstractions\Form;
+use vloop\problems\entities\abstractions\contracts\Entity;
+use vloop\problems\entities\abstractions\contracts\Form;
 
-class NullEntity implements Entity
+class ErrorsByEntity implements Entity
 {
     private $self;
+
+    /**
+     * @param array $self - ["error1"=>'message', "error2"=>"message2"]
+     */
     public function __construct(array $self) {
         $this->self = $self;
     }

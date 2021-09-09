@@ -4,10 +4,10 @@
 namespace vloop\problems\entities\rest;
 
 
-use vloop\problems\entities\abstractions\Entities;
+use vloop\problems\entities\abstractions\contracts\Entities;
+use vloop\problems\entities\abstractions\contracts\Entity;
+use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\abstractions\EntitiesCollection;
-use vloop\problems\entities\abstractions\Entity;
-use vloop\problems\entities\abstractions\Form;
 use yii\helpers\VarDumper;
 
 class RestEntities extends EntitiesCollection
@@ -28,17 +28,35 @@ class RestEntities extends EntitiesCollection
      */
     public function list(): array
     {
-        $all = $this->origin->list();
+        $all = $this->origin; //здесь либо список ошибок либо список сущностей.
         $data = [];
+        if (!$all->current()->notNull()) {
+            return [
+                'errors' => $this
+                                ->restEntity($all->current())
+                                ->printYourself()['errors'],
+            ];
+        }
         foreach ($all as $item) {
             $restItem = new RestEntity(
                 $item,
                 $this->origType,
                 $this->needleField
             );
-            $data[] = $restItem->printYourself()['data'];
+            if ($restItem->notNull()) {
+                $data[] = $restItem->printYourself()['data'];
+            }
         }
-        return $data;
+        return ['data'=>$data];
+    }
+
+    private function restEntity(Entity $entity): RestEntity
+    {
+        return new RestEntity(
+            $entity,
+            $this->origType,
+            $this->needleField
+        );
     }
 
     /**

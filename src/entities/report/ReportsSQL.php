@@ -4,10 +4,10 @@
 namespace vloop\problems\entities\report;
 
 
-use vloop\problems\entities\abstractions\Entities;
-use vloop\problems\entities\abstractions\Entity;
-use vloop\problems\entities\abstractions\Form;
-use vloop\problems\entities\abstractions\Report;
+use vloop\problems\entities\abstractions\contracts\Entities;
+use vloop\problems\entities\abstractions\contracts\Entity;
+use vloop\problems\entities\abstractions\contracts\Form;
+use vloop\problems\entities\abstractions\contracts\Report;
 use vloop\problems\tables\TableReports;
 
 class ReportsSQL implements Entities

@@ -3,12 +3,11 @@
 
 namespace vloop\problems\entities\problem;
 
-use vloop\problems\entities\abstractions\Entity;
-use vloop\problems\entities\abstractions\Form;
-use vloop\problems\entities\abstractions\Problem;
-use vloop\problems\entities\abstractions\Role;
-use vloop\problems\entities\NullEntity;
-use vloop\problems\entities\report\NullReport;
+use vloop\problems\entities\abstractions\contracts\Entity;
+use vloop\problems\entities\abstractions\contracts\Form;
+use vloop\problems\entities\abstractions\contracts\Problem;
+use vloop\problems\entities\abstractions\contracts\Role;
+use vloop\problems\entities\ErrorsByEntity;
 use vloop\problems\tables\TableProblems;
 use vloop\problems\tables\TableProblemsUsers;
 use yii\helpers\VarDumper;
@@ -53,9 +52,9 @@ class ProblemSQL implements Problem
             if($record->save()) {
                 return $this;
             }
-            return new NullEntity($record->getErrors());
+            return new ErrorsByEntity($record->getErrors());
         }
-        return new NullEntity($form->errors());
+        return new ErrorsByEntity($form->errors());
     }
 
     public function notNull(): bool

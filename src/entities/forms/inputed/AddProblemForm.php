@@ -4,8 +4,8 @@
 namespace vloop\problems\entities\forms\inputed;
 
 
-use vloop\problems\entities\forms\AbstractForm;
-use vloop\problems\entities\abstractions\Form;
+use vloop\problems\entities\abstractions\AbstractForm;
+use vloop\problems\entities\abstractions\contracts\Form;
 use Yii;
 use yii\base\Model;
 

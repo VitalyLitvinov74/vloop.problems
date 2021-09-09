@@ -1,10 +1,10 @@
 <?php
 
 
-namespace vloop\problems\entities\forms;
+namespace vloop\problems\entities\abstractions;
 
 
-use vloop\problems\entities\abstractions\Form;
+use vloop\problems\entities\abstractions\contracts\Form;
 use Yii;
 use yii\base\Model;
 

@@ -54,7 +54,7 @@ class ProblemsController extends Controller
     }
 
 
-    public function actionProblem($id)
+    public function actionProblem()
     {
         $problems =
             new CachedEntities(

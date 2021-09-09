@@ -1,7 +1,7 @@
 <?php
 
 
-namespace vloop\problems\entities\abstractions;
+namespace vloop\problems\entities\abstractions\contracts;
 
 
 interface Entities extends \Iterator
@@ -18,4 +18,9 @@ interface Entities extends \Iterator
     public function addFromInput(Form $form): Entity;
 
     public function remove(Entity $entity): bool ;
+
+    /**
+     * @return Entity - Return the current element
+    */
+    public function current();
 }

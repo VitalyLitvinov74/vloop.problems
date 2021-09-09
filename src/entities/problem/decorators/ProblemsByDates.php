@@ -4,10 +4,10 @@
 namespace vloop\problems\entities\problem\decorators;
 
 
-use vloop\problems\entities\abstractions\Entities;
-use vloop\problems\entities\abstractions\Entity;
-use vloop\problems\entities\abstractions\Form;
-use vloop\problems\entities\abstractions\Problem;
+use vloop\problems\entities\abstractions\contracts\Entities;
+use vloop\problems\entities\abstractions\contracts\Entity;
+use vloop\problems\entities\abstractions\contracts\Form;
+use vloop\problems\entities\abstractions\contracts\Problem;
 use vloop\problems\tables\TableProblems;
 
 class ProblemsByDates implements Entities

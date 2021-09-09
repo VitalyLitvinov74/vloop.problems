@@ -4,13 +4,14 @@
 namespace vloop\problems\entities\report;
 
 
-use vloop\problems\entities\abstractions\Entity;
-use vloop\problems\entities\abstractions\Form;
-use vloop\problems\entities\abstractions\Problem;
-use vloop\problems\entities\abstractions\Report;
+use vloop\problems\entities\abstractions\contracts\Entity;
+use vloop\problems\entities\abstractions\contracts\Form;
+use vloop\problems\entities\abstractions\contracts\Problem;
+use vloop\problems\entities\abstractions\contracts\Report;
+use vloop\problems\entities\ErrorsByEntity;
 use vloop\problems\tables\TableReports;
 
-class ReportSQL implements Report
+class ReportSQL implements Entity
 {
 
     private $id;
@@ -23,14 +24,6 @@ class ReportSQL implements Report
     public function id(): int
     {
         return $this->id;
-    }
-
-    public function attachToProblem(Problem $problem): Entity
-    {
-        $report = TableReports::find()->where(['id' => $this->id()])->one();
-        $report->problem_id = $problem->id();
-        $report->save();
-        return $this;
     }
 
     public function printYourself(): array
@@ -52,12 +45,19 @@ class ReportSQL implements Report
     public function changeLineData(Form $form): Entity
     {
         $fields = $form->validatedFields();
+        $record = $this->record();
         if ($fields) {
-            $record = $this->record();
-            $record->load($fields, '');
-            $record->save();
-            return $this;
+            $record->setAttributes($fields, false);
+            if($record->save()){
+                return $this;
+            }
+            return new ErrorsByEntity($record->getErrors());
         }
-        return new NullReport($form->errors());
+        return new ErrorsByEntity($form->errors());
+    }
+
+    public function notNull(): bool
+    {
+        return false;
     }
 }

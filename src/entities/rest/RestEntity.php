@@ -4,8 +4,8 @@
 namespace vloop\problems\entities\rest;
 
 
-use vloop\problems\entities\abstractions\Entity;
-use vloop\problems\entities\abstractions\Form;
+use vloop\problems\entities\abstractions\contracts\Entity;
+use vloop\problems\entities\abstractions\contracts\Form;
 use yii\helpers\VarDumper;
 
 class RestEntity implements Entity
@@ -48,16 +48,27 @@ class RestEntity implements Entity
         ];
     }
 
+    /**
+     * @return array - преобразует вложенный массив с ошибками а одномерный
+     */
     private function errors():array {
         $errors = $this->origin->printYourself();
         $retErrors = [];
         foreach ($errors as $attribute=>$errorsAttribute){
-            foreach($errorsAttribute as $concreteError){
+            if(is_array($errorsAttribute)){
+                foreach ($errorsAttribute as $concreteError){
+                    $retErrors[] = [
+                        "title"=>$attribute,
+                        "message"=> $concreteError
+                    ];
+                }
+            }else{
                 $retErrors[] = [
-                    "title"=>$attribute,
-                    "message"=> $concreteError
+                    'title'=>$attribute,
+                    'message'=> $errorsAttribute
                 ];
             }
+
         }
         return $retErrors;
     }

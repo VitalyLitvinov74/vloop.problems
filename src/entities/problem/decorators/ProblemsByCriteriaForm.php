@@ -13,7 +13,9 @@ use vloop\problems\entities\abstractions\EntitiesCollection;
 use vloop\problems\entities\ErrorsByEntity;
 use vloop\problems\entities\problem\ProblemSQL;
 use vloop\problems\tables\TableProblems;
+use yii\base\Exception;
 use yii\helpers\VarDumper;
+use yii\web\NotFoundHttpException;
 
 class ProblemsByCriteriaForm extends EntitiesCollection
 {
@@ -35,7 +37,7 @@ class ProblemsByCriteriaForm extends EntitiesCollection
             $all = TableProblems::find()->where($fields)->all();
             return $this->entities($all);
         }
-        return [new ErrorsByEntity($this->form->errors())];
+        return [];
     }
 
     /**

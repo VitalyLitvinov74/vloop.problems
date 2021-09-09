@@ -7,6 +7,7 @@ namespace vloop\problems\entities\abstractions;
 use vloop\problems\entities\abstractions\contracts\Entities;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\ErrorsByEntity;
+use yii\web\NotFoundHttpException;
 
 abstract class EntitiesCollection implements Entities
 {
@@ -20,10 +21,7 @@ abstract class EntitiesCollection implements Entities
      */
     public function current()
     {
-        if($this->valid()){
-            return $this->list()[$this->position];
-        }
-        return new ErrorsByEntity(["Not Found"=>"Сущность не найдена."]);
+        return $this->list()[$this->position];
     }
 
     /**

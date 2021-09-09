@@ -23,6 +23,16 @@ class ProblemsModule extends Module
                     if ($response->data !== null and isset($response->data['errors'])) {
                        $this->pastErrorStatusCode($response->data['errors']);
                     }
+                    if ($response->data !== null and isset($response->data['name']) and ($response->data['message'])) { //exception
+                        Yii::$app->response->data = [
+                            'errors'=>[
+                                [
+                                    'title'=>$response->data['name'],
+                                    'message'=>$response->data['message']
+                                ]
+                            ]
+                        ];
+                    }
                 },
             ],
         ]);

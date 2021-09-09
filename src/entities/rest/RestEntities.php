@@ -30,22 +30,9 @@ class RestEntities extends EntitiesCollection
     {
         $all = $this->origin; //здесь либо список ошибок либо список сущностей.
         $data = [];
-        if (!$all->current()->notNull()) {
-            return [
-                'errors' => $this
-                                ->restEntity($all->current())
-                                ->printYourself()['errors'],
-            ];
-        }
         foreach ($all as $item) {
-            $restItem = new RestEntity(
-                $item,
-                $this->origType,
-                $this->needleField
-            );
-            if ($restItem->notNull()) {
-                $data[] = $restItem->printYourself()['data'];
-            }
+            $restItem = $this->restEntity($item);
+            $data[] = $restItem->printYourself()['data'];
         }
         return ['data'=>$data];
     }
@@ -65,9 +52,8 @@ class RestEntities extends EntitiesCollection
      */
     public function addFromInput(Form $form): Entity
     {
-        return new RestEntity(
-            $this->origin->addFromInput($form),
-            $this->origType
+        return $this->restEntity(
+            $this->origin->addFromInput($form)
         );
     }
 
@@ -83,10 +69,6 @@ class RestEntities extends EntitiesCollection
 
     public function current()
     {
-        return new RestEntity(
-            $this->origin->current(),
-            $this->origType,
-            $this->needleField
-        );
+        return $this->restEntity($this->origin->current());
     }
 }

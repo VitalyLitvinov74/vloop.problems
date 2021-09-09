@@ -4,6 +4,7 @@
 namespace vloop\problems\entities\problem;
 
 
+use http\Exception\InvalidArgumentException;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\abstractions\contracts\Problem;
@@ -22,7 +23,7 @@ class ProblemsSQL extends EntitiesCollection
 {
 
     /**
-     * @return Problem[]
+     * @return Problem[]|ErrorsByEntity[]
      */
     public function list(): array
     {
@@ -30,11 +31,6 @@ class ProblemsSQL extends EntitiesCollection
         $all = TableProblems::find()->all();
         foreach ($all as $item) {
             $entities[] = new ProblemSQL($item->id);
-        }
-        if (!$entities) {
-            $entities[] = new ErrorsByEntity([
-                "Not Found" => 'Не найдены проблемы'
-            ]);
         }
         return $entities;
     }
@@ -46,29 +42,9 @@ class ProblemsSQL extends EntitiesCollection
     public function addFromInput(Form $form): Entity
     {
         $fields = $form->validatedFields();
-        if ($fields) {
-            $record = new TableProblems($fields);
-            try {
-                if ($record->save()) {
-                    return new ProblemSQL($record->id);
-                } else {
-                    return new ErrorsByEntity($record->getErrors());
-                }
-            } catch (StaleObjectException $e) {
-                return new ErrorsByEntity([
-                    $e->getName() => $e->getMessage()
-                ]);
-            } catch (Exception $e) {
-                return new ErrorsByEntity([
-                    $e->getName() => $e->getMessage()
-                ]);
-            } catch (NotInstantiableException $e) {
-                return new ErrorsByEntity([
-                    $e->getName() => $e->getMessage()
-                ]);
-            }
-        }
-        return new ErrorsByEntity($form->errors());
+        $record = new TableProblems($fields);
+        $record->save();
+        return new ProblemSQL($record->id);
     }
 
     public function remove(Entity $entity): bool

@@ -23,6 +23,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\VarDumper;
 use yii\rest\Controller;
+use yii\web\NotFoundHttpException;
 
 class ProblemsController extends Controller
 {

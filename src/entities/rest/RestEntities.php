@@ -16,7 +16,8 @@ class RestEntities extends EntitiesCollection
     private $origin;
     private $needleField;
 
-    public function __construct(Entities $entitiesList, string $entityType, array $needleFields = []) {
+    public function __construct(Entities $entitiesList, string $entityType, array $needleFields = [])
+    {
         $this->needleField = $needleFields;
         $this->origin = $entitiesList;
         $this->origType = $entityType;
@@ -29,7 +30,7 @@ class RestEntities extends EntitiesCollection
     {
         $all = $this->origin->list();
         $data = [];
-        foreach ($all as $item){
+        foreach ($all as $item) {
             $restItem = new RestEntity(
                 $item,
                 $this->origType,
@@ -37,9 +38,7 @@ class RestEntities extends EntitiesCollection
             );
             $data[] = $restItem->printYourself()['data'];
         }
-        return [
-            'data'=>$data
-        ];
+        return $data;
     }
 
     /**
@@ -57,5 +56,19 @@ class RestEntities extends EntitiesCollection
     public function remove(Entity $entity): bool
     {
         return $this->origin->remove($entity);
+    }
+
+    public function valid()
+    {
+        return isset($this->origin->list()[$this->position]);
+    }
+
+    public function current()
+    {
+        return new RestEntity(
+            $this->origin->current(),
+            $this->origType,
+            $this->needleField
+        );
     }
 }

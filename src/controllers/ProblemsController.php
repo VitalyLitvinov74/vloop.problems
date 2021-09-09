@@ -86,9 +86,12 @@ class ProblemsController extends Controller
     public function actionChangeStatus()
     {
         $problems =
-            new ProblemsByCriteriaForm(
-                new ProblemsSQL(),
-                new CriteriaIDEntity()
+            new RestEntities(
+                new ProblemsByCriteriaForm(
+                    new ProblemsSQL(),
+                    new CriteriaIDEntity()
+                ),
+                'problem'
             );
         return $problems
             ->current()

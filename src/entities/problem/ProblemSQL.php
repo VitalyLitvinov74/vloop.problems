@@ -7,6 +7,7 @@ use vloop\problems\entities\abstractions\Entity;
 use vloop\problems\entities\abstractions\Form;
 use vloop\problems\entities\abstractions\Problem;
 use vloop\problems\entities\abstractions\Role;
+use vloop\problems\entities\NullEntity;
 use vloop\problems\entities\report\NullReport;
 use vloop\problems\tables\TableProblems;
 use vloop\problems\tables\TableProblemsUsers;
@@ -48,12 +49,13 @@ class ProblemSQL implements Problem
         $record = $this->record();
         $fields = $form->validatedFields();
         if($fields){
-            VarDumper::dump($form);
-            $record->load($form->validatedFields(), '');
-            VarDumper::dump($record);
+            $record->setAttributes($fields, false);
+            if($record->save()) {
+                return $this;
+            }
+            return new NullEntity($record->getErrors());
         }
-
-        return new NullProblem($form->errors());
+        return new NullEntity($form->errors());
     }
 
     public function notNull(): bool

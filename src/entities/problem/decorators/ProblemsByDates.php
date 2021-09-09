@@ -28,7 +28,7 @@ class ProblemsByDates implements Entities
     /**
      * @return Entity[]
      */
-    public function all(): array
+    public function list(): array
     {
         $fields = $this->dateForm->validatedFields();
         if($fields){

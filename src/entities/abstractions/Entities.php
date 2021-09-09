@@ -9,7 +9,7 @@ interface Entities extends \Iterator
     /**
      * @return Entity[]
     */
-    public function all(): array;
+    public function list(): array;
 
     /**
      * @param Form $form - форма, которая выдает провалидированные данные

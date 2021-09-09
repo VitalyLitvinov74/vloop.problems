@@ -1,31 +1,53 @@
 <?php
 
 
-namespace vloop\problems\entities\problem;
+namespace vloop\problems\entities\problem\decorators;
 
 
 use vloop\problems\entities\abstractions\Entities;
+use vloop\problems\entities\abstractions\EntitiesCollection;
 use vloop\problems\entities\abstractions\Entity;
 use vloop\problems\entities\abstractions\Form;
 use vloop\problems\entities\abstractions\Problem;
 use vloop\problems\entities\abstractions\Role;
+use vloop\problems\entities\problem\NullProblem;
+use vloop\problems\entities\problem\ProblemSQL;
+use vloop\problems\tables\TableProblems;
+use yii\helpers\VarDumper;
 
-class ProblemsByCriteriaForm implements Entities
+class ProblemsByCriteriaForm extends EntitiesCollection
 {
     private $form;
-    private $problems;
+    protected $origin;
 
-    public function __construct(Entities $problems, Form $form) {
+    public function __construct(Entities $origin, Form $form) {
         $this->form = $form;
-        $this->problems = $problems;
+        $this->origin = $origin;
     }
 
     /**
      * @return Entity[]
      */
-    public function all(): array
+    public function list(): array
     {
+        $fields = $this->form->validatedFields();
+        if($fields){
+            $all = TableProblems::find()->where($fields)->all();
+            return $this->entities($all);
+        }
+        return [];
+    }
 
+    /**
+     * @param TableProblems[] $activeRecords
+     * @return Entity[]
+     */
+    private function entities(array $activeRecords): array{
+        $entities = [];
+        foreach ($activeRecords as $record){
+            $entities[] = new ProblemSQL($record->id);
+        }
+        return $entities;
     }
 
     /**
@@ -34,16 +56,11 @@ class ProblemsByCriteriaForm implements Entities
      */
     public function addFromInput(Form $form): Entity
     {
-        // TODO: Implement addFromInput() method.
-    }
-
-    public function oneByCriteria(array $criteria): Entity
-    {
-        // TODO: Implement oneByCriteria() method.
+        return $this->origin->addFromInput($form);
     }
 
     public function remove(Entity $entity): bool
     {
-        // TODO: Implement remove() method.
+        return $this->origin->remove($entity);
     }
 }

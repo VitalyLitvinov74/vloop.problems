@@ -5,11 +5,12 @@ namespace vloop\problems\entities\rest;
 
 
 use vloop\problems\entities\abstractions\Entities;
+use vloop\problems\entities\abstractions\EntitiesCollection;
 use vloop\problems\entities\abstractions\Entity;
 use vloop\problems\entities\abstractions\Form;
 use yii\helpers\VarDumper;
 
-class RestEntities implements Entities
+class RestEntities extends EntitiesCollection
 {
     private $origType;
     private $origin;
@@ -24,9 +25,9 @@ class RestEntities implements Entities
     /**
      * @return Entity[]
      */
-    public function all(): array
+    public function list(): array
     {
-        $all = $this->origin->all();
+        $all = $this->origin->list();
         $data = [];
         foreach ($all as $item){
             $restItem = new RestEntity(

@@ -16,7 +16,7 @@ class ReportsSQL implements Entities
     /**
      * @return Entity[]
      */
-    public function all(): array
+    public function list(): array
     {
         $records = TableReports::find()->select('id')->all();
         $entities = [];

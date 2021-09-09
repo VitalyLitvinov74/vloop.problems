@@ -3,16 +3,16 @@
 
 namespace vloop\problems\controllers;
 
+use vloop\problems\entities\cache\CachedEntities;
 use vloop\problems\entities\forms\criteria\CriteriaIDEntity;
 use vloop\problems\entities\forms\criteria\CriteriaProblemsByDates;
 use vloop\problems\entities\forms\FormReport;
 use vloop\problems\entities\forms\inputed\AddProblemForm;
 use vloop\problems\entities\forms\inputed\ChangeStatusProblemForm;
 use vloop\problems\entities\forms\inputed\InputsForChangeReport;
-use vloop\problems\entities\problem\decorators\ProblemByForm;
+use vloop\problems\entities\problem\decorators\ProblemsByCriteriaForm;
 use vloop\problems\entities\problem\decorators\ProblemsByDates;
-use vloop\problems\entities\problem\decorators\RestProblem;
-use vloop\problems\entities\problem\ProblemsByCriteriaForm;
+use vloop\problems\entities\problem\NullProblem;
 use vloop\problems\entities\problem\ProblemsSQL;
 use vloop\problems\entities\report\ReportByCriteriaForm;
 use vloop\problems\entities\report\ReportSQL;
@@ -43,23 +43,31 @@ class ProblemsController extends Controller
 
     public function actionProblems()
     {
-        $problems = new RestEntities(
-            new ProblemsSQL(),
-            'problem'
-        );
-        return $problems->all();
+        $problems =
+            new RestEntities(
+                new CachedEntities(
+                    new ProblemsSQL()
+                ),
+                'problem'
+            );
+        return $problems->list();
     }
 
 
     public function actionProblem($id)
     {
-        $problems = new RestEntities(
-            new ProblemsSQL(),
+        $problems =
+            new CachedEntities(
+                new ProblemsByCriteriaForm(
+                    new ProblemsSQL(),
+                    new CriteriaIDEntity('get')
+                )
+            );
+        $entity = new RestEntity(
+            $problems->current(),
             'problem'
         );
-        return $problems
-            ->oneByCriteria(['id' => $id])
-            ->printYourself();
+        return $entity->printYourself();
     }
 
     public function actionAddProblem()
@@ -77,15 +85,13 @@ class ProblemsController extends Controller
 
     public function actionChangeStatus()
     {
-        $problem =
-            new RestEntity(
-                new ProblemsByCriteriaForm( //не очевидное использование ProblemSQL
-                    new ProblemsSQL(),
-                    new CriteriaIDEntity()
-                ),
-                'problem'
+        $problems =
+            new ProblemsByCriteriaForm(
+                new ProblemsSQL(),
+                new CriteriaIDEntity()
             );
-        return $problem
+        return $problems
+            ->current()
             ->changeLineData(new ChangeStatusProblemForm())
             ->printYourself();
     }
@@ -116,6 +122,6 @@ class ProblemsController extends Controller
             new ProblemsSQL(),
             new CriteriaProblemsByDates()
         );
-        return $problems->all();
+        return $problems->list();
     }
 }

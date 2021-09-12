@@ -8,6 +8,7 @@ use vloop\problems\entities\abstractions\contracts\Entities;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\abstractions\EntitiesCollection;
+use vloop\problems\entities\exceptions\ValidateFieldsException;
 use yii\helpers\VarDumper;
 
 /**

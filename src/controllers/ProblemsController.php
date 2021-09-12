@@ -4,6 +4,8 @@
 namespace vloop\problems\controllers;
 
 use vloop\problems\entities\cache\CachedEntities;
+use vloop\problems\entities\exceptions\RestExceptions;
+use vloop\problems\entities\exceptions\ValidateFieldsException;
 use vloop\problems\entities\forms\criteria\CriteriaIDEntity;
 use vloop\problems\entities\forms\criteria\CriteriaProblemsByDates;
 use vloop\problems\entities\forms\FormReport;
@@ -58,17 +60,16 @@ class ProblemsController extends Controller
     public function actionProblem()
     {
         $problems =
-            new CachedEntities(
-                new ProblemsByCriteriaForm(
-                    new ProblemsSQL(),
-                    new CriteriaIDEntity('get')
-                )
+            new RestEntities(
+                new CachedEntities(
+                    new ProblemsByCriteriaForm(
+                        new ProblemsSQL(),
+                        new CriteriaIDEntity('get')
+                    )
+                ),
+                'problem'
             );
-        $entity = new RestEntity(
-            $problems->current(),
-            'problem'
-        );
-        return $entity->printYourself();
+        return $problems->current();
     }
 
     public function actionAddProblem()

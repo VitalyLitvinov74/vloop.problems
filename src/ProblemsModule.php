@@ -4,6 +4,7 @@
 namespace vloop\problems;
 
 
+use vloop\problems\entities\exceptions\ValidateFieldsException;
 use Yii;
 use yii\base\Module;
 use yii\helpers\ArrayHelper;
@@ -45,6 +46,14 @@ class ProblemsModule extends Module
         }else{
             Yii::$app->response->setStatusCode(422);
         }
+    }
 
+    public function runAction($route, $params = [])
+    {
+        try{
+            return parent::runAction($route, $params);
+        }catch (ValidateFieldsException $exception){
+            return ['errors'=>$exception->errors()];
+        }
     }
 }

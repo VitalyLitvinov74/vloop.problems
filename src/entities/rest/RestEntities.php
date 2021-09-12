@@ -4,11 +4,15 @@
 namespace vloop\problems\entities\rest;
 
 
+use vloop\problems\entities\abstractions\AbstractException;
 use vloop\problems\entities\abstractions\contracts\Entities;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\abstractions\EntitiesCollection;
+use vloop\problems\entities\ErrorsByEntity;
+use vloop\problems\entities\exceptions\ValidateFieldsException;
 use yii\helpers\VarDumper;
+use yii\web\NotFoundHttpException;
 
 class RestEntities extends EntitiesCollection
 {
@@ -28,13 +32,19 @@ class RestEntities extends EntitiesCollection
      */
     public function list(): array
     {
-        $all = $this->origin; //здесь либо список ошибок либо список сущностей.
+        return [
+            'data' => $this->simpleList()
+        ];
+    }
+
+    private function simpleList(): array
+    {
+        $all = $this->origin;
         $data = [];
         foreach ($all as $item) {
-            $restItem = $this->restEntity($item);
-            $data[] = $restItem->printYourself()['data'];
+            $data[] = $this->restEntity($item)->printYourself()['data'];
         }
-        return ['data'=>$data];
+        return $data;
     }
 
     private function restEntity(Entity $entity): RestEntity
@@ -64,11 +74,15 @@ class RestEntities extends EntitiesCollection
 
     public function valid()
     {
-        return isset($this->origin->list()[$this->position]);
+        //нужно делать через свой массив.
+        return isset($this->simpleList()[$this->position]);
     }
 
+    /**
+     * @return Entity|RestEntity
+     */
     public function current()
     {
-        return $this->restEntity($this->origin->current());
+        return $this->simpleList()[$this->position];
     }
 }

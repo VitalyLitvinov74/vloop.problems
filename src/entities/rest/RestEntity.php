@@ -6,6 +6,7 @@ namespace vloop\problems\entities\rest;
 
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
+use vloop\problems\entities\exceptions\ValidateFieldsException;
 use yii\helpers\VarDumper;
 
 class RestEntity implements Entity
@@ -34,43 +35,13 @@ class RestEntity implements Entity
 
     public function printYourself(): array
     {
-        if ($this->origin->notNull()) {
-            return [
-                'data' => [
-                    "type" => $this->originType,
-                    "id" => $this->id(),
-                    "attributes" => $this->attributes()
-                ]
-            ];
-        }
         return [
-            'errors'=>$this->errors()
+            'data' => [
+                "type" => $this->originType,
+                "id" => $this->id(),
+                "attributes" => $this->attributes()
+            ]
         ];
-    }
-
-    /**
-     * @return array - преобразует вложенный массив с ошибками а одномерный
-     */
-    private function errors():array {
-        $errors = $this->origin->printYourself();
-        $retErrors = [];
-        foreach ($errors as $attribute=>$errorsAttribute){
-            if(is_array($errorsAttribute)){
-                foreach ($errorsAttribute as $concreteError){
-                    $retErrors[] = [
-                        "title"=>$attribute,
-                        "message"=> $concreteError
-                    ];
-                }
-            }else{
-                $retErrors[] = [
-                    'title'=>$attribute,
-                    'message'=> $errorsAttribute
-                ];
-            }
-
-        }
-        return $retErrors;
     }
 
     private function attributes()

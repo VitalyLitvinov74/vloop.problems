@@ -11,6 +11,7 @@ use vloop\problems\entities\abstractions\contracts\Problem;
 use vloop\problems\entities\abstractions\contracts\Role;
 use vloop\problems\entities\abstractions\EntitiesCollection;
 use vloop\problems\entities\ErrorsByEntity;
+use vloop\problems\entities\exceptions\ValidateFieldsException;
 use vloop\problems\entities\problem\ProblemSQL;
 use vloop\problems\tables\TableProblems;
 use yii\base\Exception;
@@ -33,11 +34,8 @@ class ProblemsByCriteriaForm extends EntitiesCollection
     public function list(): array
     {
         $fields = $this->form->validatedFields();
-        if($fields){
-            $all = TableProblems::find()->where($fields)->all();
-            return $this->entities($all);
-        }
-        return [];
+        $all = TableProblems::find()->where($fields)->all();
+        return $this->entities($all);
     }
 
     /**

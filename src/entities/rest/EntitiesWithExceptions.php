@@ -49,7 +49,9 @@ class EntitiesWithExceptions implements Entities
     public function add(Form $form): Entity
     {
         try {
-            return $this->origin->add($form);
+            return new OneEntityWithExceptions(
+                $this->origin->add($form)
+            );
         } catch (NotSavedRecord $exception) {
             return $this->modelErrorsAsEntity($exception);
         } catch (NotValidatedFields $exception) {
@@ -64,7 +66,9 @@ class EntitiesWithExceptions implements Entities
     public function entity(int $id): Entity
     {
         try{
-            return $this->origin->entity($id);
+            return new OneEntityWithExceptions(
+                $this->origin->entity($id)
+            );
         }catch (NotFoundHttpException $exception){
             return new RestError(
                 new ErrorForException($exception->getName(), $exception->getMessage())

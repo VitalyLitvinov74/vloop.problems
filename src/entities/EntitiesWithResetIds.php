@@ -9,6 +9,7 @@ use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\exceptions\NotSavedRecord;
 use vloop\problems\entities\exceptions\NotValidatedFields;
+use yii\helpers\VarDumper;
 use yii\web\NotFoundHttpException;
 
 class EntitiesWithResetIds implements Entities

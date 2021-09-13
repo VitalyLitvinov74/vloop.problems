@@ -16,7 +16,7 @@ use vloop\problems\entities\problem\decorators\ProblemsByDates;
 use vloop\problems\entities\problem\ProblemsSQL;
 use vloop\problems\entities\report\ReportSQL;
 use vloop\problems\entities\report\ReportsSQL;
-use vloop\problems\entities\rest\RestEntities;
+use vloop\problems\entities\rest\JsonApiEntities;
 use vloop\problems\entities\rest\RestEntity;
 use vloop\problems\entities\rest\EntitiesWithExceptions;
 use Yii;
@@ -46,7 +46,7 @@ class ProblemsController extends Controller
     {
         $problems =
             new EntitiesWithExceptions(
-                new RestEntities(
+                new JsonApiEntities(
                     new CachedEntities(
                         new ProblemsSQL()
                     ),
@@ -61,7 +61,7 @@ class ProblemsController extends Controller
     {
         $problems =
             new EntitiesWithExceptions(
-                new RestEntities(
+                new JsonApiEntities(
                     new EntitiesWithResetIds(
                         new ProblemsByCriteriaForm(
                             new CriteriaIDEntity('get')
@@ -79,7 +79,7 @@ class ProblemsController extends Controller
     {
         $problems =
             new EntitiesWithExceptions(
-                new RestEntities(
+                new JsonApiEntities(
                     new ProblemsSQL(),
                     'problem'
                 )
@@ -93,8 +93,8 @@ class ProblemsController extends Controller
     public function actionChangeStatus()
     {
         $problems =
-            new EntitiesWithExceptions(
-                new RestEntities(
+            new EntitiesWithExceptions( //если поместить в середину, то программа не прерывается.
+                new JsonApiEntities( //с полями data
                     new EntitiesWithResetIds(
                         new ProblemsByCriteriaForm(
                             new CriteriaIDEntity()

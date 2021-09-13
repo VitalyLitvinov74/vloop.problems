@@ -8,8 +8,8 @@ use vloop\problems\entities\abstractions\contracts\Entities;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\abstractions\contracts\VloopException;
-use vloop\problems\entities\errors\ErrorForException;
-use vloop\problems\entities\errors\ModelErrorsAsEntity;
+use vloop\problems\entities\errors\DefaultExceptionAsEntity;
+use vloop\problems\entities\errors\ArrayErrorsAsEntity;
 use vloop\problems\entities\exceptions\NotSavedRecord;
 use vloop\problems\entities\exceptions\NotValidatedFields;
 use yii\helpers\VarDumper;
@@ -44,7 +44,7 @@ class EntitiesWithExceptions implements Entities
 
     /**
      * @param Form $form - форма, которая выдает провалидированные данные
-     * @return Entity - Проблема которую нужно решить
+     * @return Entity|OneEntityWithExceptions - Проблема которую нужно решить
      */
     public function add(Form $form): Entity
     {
@@ -66,12 +66,12 @@ class EntitiesWithExceptions implements Entities
     public function entity(int $id): Entity
     {
         try{
-            return new OneEntityWithExceptions(
+            return new OneEntityWithExceptions( //обрабатываем в декораторе ошибки которые могут возникнуть в одной сущности.
                 $this->origin->entity($id)
             );
         }catch (NotFoundHttpException $exception){
             return new RestError(
-                new ErrorForException($exception->getName(), $exception->getMessage())
+                new DefaultExceptionAsEntity($exception->getName(), $exception->getMessage())
             );
         }catch (NotValidatedFields $exception){
             return $this->modelErrorsAsEntity($exception);
@@ -81,9 +81,7 @@ class EntitiesWithExceptions implements Entities
     private function modelErrorsAsEntity(VloopException $except)
     {
         return new RestError(
-            new ModelErrorsAsEntity($except->errors())
+            new ArrayErrorsAsEntity($except->errors())
         );
     }
-
-
 }

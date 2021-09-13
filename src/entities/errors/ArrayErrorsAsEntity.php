@@ -13,7 +13,7 @@ use yii\helpers\VarDumper;
 /**
  * Ошибки модели Yii в виде сущности.
 */
-class ModelErrorsAsEntity implements Entity
+class ArrayErrorsAsEntity implements Entity
 {
     private $allErrors;
 

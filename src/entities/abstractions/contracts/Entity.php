@@ -16,8 +16,6 @@ interface Entity
     /**
      * @param Form $form
      * @return Entity
-     * @throws NotSavedRecord
-     * @throws NotValidatedFields
      */
     public function changeLineData(Form $form): Entity;
 

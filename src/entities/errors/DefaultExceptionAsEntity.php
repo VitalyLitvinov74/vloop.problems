@@ -7,7 +7,7 @@ namespace vloop\problems\entities\errors;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
 
-class ErrorForException implements Entity
+class DefaultExceptionAsEntity implements Entity
 {
     private $message;
     private  $title;

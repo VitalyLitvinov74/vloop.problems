@@ -8,7 +8,7 @@ use vloop\problems\entities\abstractions\contracts\Entities;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\abstractions\contracts\VloopException;
-use vloop\problems\entities\errors\ModelErrorsAsEntity;
+use vloop\problems\entities\errors\ArrayErrorsAsEntity;
 use vloop\problems\entities\exceptions\NotSavedRecord;
 use vloop\problems\entities\exceptions\NotValidatedFields;
 
@@ -33,8 +33,6 @@ class OneEntityWithExceptions implements Entity
     /**
      * @param Form $form
      * @return Entity
-     * @throws NotSavedRecord
-     * @throws NotValidatedFields
      */
     public function changeLineData(Form $form): Entity
     {
@@ -51,7 +49,7 @@ class OneEntityWithExceptions implements Entity
 
     private function restError(VloopException $exception){
         return new RestError(
-            new ModelErrorsAsEntity(
+            new ArrayErrorsAsEntity(
                 $exception->errors()
             )
         );

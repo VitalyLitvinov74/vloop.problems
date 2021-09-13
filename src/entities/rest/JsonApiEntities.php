@@ -14,7 +14,7 @@ use vloop\problems\entities\exceptions\NotValidatedFields;
 use yii\helpers\VarDumper;
 use yii\web\NotFoundHttpException;
 
-class RestEntities implements Entities
+class JsonApiEntities implements Entities
 {
     private $origType;
     private $origin;

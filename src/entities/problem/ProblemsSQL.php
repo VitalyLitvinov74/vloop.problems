@@ -21,7 +21,7 @@ use yii\di\NotInstantiableException;
 use yii\helpers\VarDumper;
 use yii\web\NotFoundHttpException;
 
-class ProblemsSQL extends EntitiesCollection
+class ProblemsSQL extends AbstractProblems
 {
 
     /**
@@ -37,31 +37,11 @@ class ProblemsSQL extends EntitiesCollection
         return $entities;
     }
 
-    /**
-     * @param Form $form - форма, которая выдает провалидированные данные
-     * @return Entity - Проблема которую нужно решить
-     * @throws NotSavedRecord
-     * @throws NotValidatedFields
-     */
-    public function add(Form $form): Entity
-    {
-        $fields = $form->validatedFields();
-        $record = new TableProblems($fields);
-        if($record->save()){
-            return new ProblemSQL($record->id);
-        }
-        throw new NotSavedRecord($record->getErrors(),422);
-    }
-
-    public function remove(Entity $entity): bool
-    {
-        return TableProblems::deleteAll(['id' => $entity->id()]);
-    }
-
     public function entity(int $id):Entity
     {
-        if(isset($this->list()[$id])){
-            return $this->list()[$id];
+        $record = TableProblems::find()->where(['id'=>$id])->one();
+        if($record){
+            return new ProblemSQL($record->id);
         }
         throw new NotFoundHttpException("Проблема не найдена.");
     }

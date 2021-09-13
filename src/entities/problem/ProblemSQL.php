@@ -45,12 +45,6 @@ class ProblemSQL implements Problem
         return $this->record;
     }
 
-
-    public function notNull(): bool
-    {
-        return true;
-    }
-
     /**
      * добавляет пользователя к задаче
      * @param int $id - ид юзера

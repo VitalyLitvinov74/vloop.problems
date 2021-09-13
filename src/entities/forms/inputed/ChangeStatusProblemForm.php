@@ -4,7 +4,8 @@
 namespace vloop\problems\entities\forms\inputed;
 
 
-use vloop\problems\entities\forms\AbstractForm;
+
+use vloop\problems\entities\abstractions\AbstractForm;
 
 class ChangeStatusProblemForm extends AbstractForm
 {

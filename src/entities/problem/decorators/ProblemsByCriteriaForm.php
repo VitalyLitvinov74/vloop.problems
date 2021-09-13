@@ -12,24 +12,24 @@ use vloop\problems\entities\abstractions\contracts\Role;
 use vloop\problems\entities\abstractions\EntitiesCollection;
 use vloop\problems\entities\ErrorsByEntity;
 use vloop\problems\entities\exceptions\NotValidatedFields;
+use vloop\problems\entities\problem\AbstractProblems;
 use vloop\problems\entities\problem\ProblemSQL;
 use vloop\problems\tables\TableProblems;
 use yii\base\Exception;
 use yii\helpers\VarDumper;
 use yii\web\NotFoundHttpException;
 
-class ProblemsByCriteriaForm extends EntitiesCollection
+class ProblemsByCriteriaForm extends AbstractProblems
 {
     private $form;
-    protected $origin;
 
-    public function __construct(Entities $origin, Form $form) {
+    public function __construct(Form $form) {
         $this->form = $form;
-        $this->origin = $origin;
     }
 
     /**
      * @return Entity[]
+     * @throws NotValidatedFields
      */
     public function list(): array
     {
@@ -45,22 +45,23 @@ class ProblemsByCriteriaForm extends EntitiesCollection
     private function entities(array $activeRecords): array{
         $entities = [];
         foreach ($activeRecords as $record){
-            $entities[] = new ProblemSQL($record->id);
+            $entities[$record->id] = new ProblemSQL($record->id);
         }
         return $entities;
     }
 
     /**
-     * @param Form $form - форма, которая выдает провалидированные данные
-     * @return Entity - Проблема которую нужно решить
+     * @param int $id
+     * @return Entity
+     * @throws NotFoundHttpException
+     * @throws NotValidatedFields
+     * id не берутся с оригинала, т.к. тут наложены ограничения на выборку оригинала.
      */
-    public function add(Form $form): Entity
+    public function entity(int $id): Entity
     {
-        return $this->origin->add($form);
-    }
-
-    public function remove(Entity $entity): bool
-    {
-        return $this->origin->remove($entity);
+        if(isset($this->list()[$id])){
+            return $this->list()[$id];
+        }
+        throw new NotFoundHttpException("Проблема не найдена");
     }
 }

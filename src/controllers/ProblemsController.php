@@ -4,6 +4,7 @@
 namespace vloop\problems\controllers;
 
 use vloop\problems\entities\cache\CachedEntities;
+use vloop\problems\entities\EntitiesWithResetIds;
 use vloop\problems\entities\exceptions\NotValidatedFields;
 use vloop\problems\entities\forms\criteria\CriteriaIDEntity;
 use vloop\problems\entities\forms\criteria\CriteriaProblemsByDates;
@@ -17,7 +18,7 @@ use vloop\problems\entities\report\ReportSQL;
 use vloop\problems\entities\report\ReportsSQL;
 use vloop\problems\entities\rest\RestEntities;
 use vloop\problems\entities\rest\RestEntity;
-use vloop\problems\entities\rest\RestValidatedEntities;
+use vloop\problems\entities\rest\EntitiesWithExceptions;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\VarDumper;
@@ -44,11 +45,13 @@ class ProblemsController extends Controller
     public function actionProblems()
     {
         $problems =
-            new RestEntities(
-                new CachedEntities(
-                    new ProblemsSQL()
-                ),
-                'problem'
+            new EntitiesWithExceptions(
+                new RestEntities(
+                    new CachedEntities(
+                        new ProblemsSQL()
+                    ),
+                    'problem'
+                )
             );
         return $problems->list();
     }
@@ -57,22 +60,25 @@ class ProblemsController extends Controller
     public function actionProblem()
     {
         $problems =
-            new RestEntities(
-                new CachedEntities(
-                    new ProblemsByCriteriaForm(
-                        new ProblemsSQL(),
-                        new CriteriaIDEntity('get')
-                    )
-                ),
-                'problem'
+            new EntitiesWithExceptions(
+                new RestEntities(
+                    new EntitiesWithResetIds(
+                        new ProblemsByCriteriaForm(
+                            new CriteriaIDEntity('get')
+                        )
+                    ),
+                    'problem'
+                )
             );
-        return $problems->current();
+        return $problems
+            ->entity(0)
+            ->printYourself();
     }
 
     public function actionAddProblem()
     {
         $problems =
-            new RestValidatedEntities(
+            new EntitiesWithExceptions(
                 new RestEntities(
                     new ProblemsSQL(),
                     'problem'
@@ -87,15 +93,18 @@ class ProblemsController extends Controller
     public function actionChangeStatus()
     {
         $problems =
-            new RestEntities(
-                new ProblemsByCriteriaForm(
-                    new ProblemsSQL(),
-                    new CriteriaIDEntity()
-                ),
-                'problem'
+            new EntitiesWithExceptions(
+                new RestEntities(
+                    new EntitiesWithResetIds(
+                        new ProblemsByCriteriaForm(
+                            new CriteriaIDEntity()
+                        )
+                    ),
+                    'problem'
+                )
             );
         return $problems
-            ->current()
+            ->entity(0)
             ->changeLineData(new ChangeStatusProblemForm())
             ->printYourself();
     }

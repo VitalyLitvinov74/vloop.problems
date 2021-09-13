@@ -39,7 +39,7 @@ class RestEntities implements Entities
 
     private function simpleList(): array
     {
-        $all = $this->origin;
+        $all = $this->origin->list();
         $data = [];
         foreach ($all as $item) {
             $data[] = $this->restEntity($item)->printYourself()['data'];
@@ -69,8 +69,10 @@ class RestEntities implements Entities
         );
     }
 
-    public function entity(int $id):Entity
+    public function entity(int $id): Entity
     {
-        return $this->list()[$id];
+        return $this->restEntity(
+            $this->origin->entity($id)
+        );
     }
 }

@@ -3,11 +3,9 @@
 
 namespace vloop\problems\entities\exceptions;
 
+use vloop\problems\entities\abstractions\contracts\VloopException;
 
-use Throwable;
-use vloop\problems\entities\abstractions\AbstractException;
-
-class ValidateFieldsException extends AbstractException
+class NotValidatedFields extends \Exception implements VloopException
 {
     private $errors;
 
@@ -16,7 +14,7 @@ class ValidateFieldsException extends AbstractException
         parent::__construct('', $code);
     }
 
-    function errors(): array
+    public function errors(): array
     {
         return $this->errors;
     }

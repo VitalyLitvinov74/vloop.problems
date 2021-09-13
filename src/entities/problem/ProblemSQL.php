@@ -8,6 +8,8 @@ use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\abstractions\contracts\Problem;
 use vloop\problems\entities\abstractions\contracts\Role;
 use vloop\problems\entities\ErrorsByEntity;
+use vloop\problems\entities\exceptions\NotSavedRecord;
+use vloop\problems\entities\exceptions\NotValidatedFields;
 use vloop\problems\tables\TableProblems;
 use vloop\problems\tables\TableProblemsUsers;
 use yii\helpers\VarDumper;
@@ -43,19 +45,6 @@ class ProblemSQL implements Problem
         return $this->record;
     }
 
-    public function changeLineData(Form $form): Entity
-    {
-        $record = $this->record();
-        $fields = $form->validatedFields();
-        if($fields){
-            $record->setAttributes($fields, false);
-            if($record->save()) {
-                return $this;
-            }
-            return new ErrorsByEntity($record->getErrors());
-        }
-        return new ErrorsByEntity($form->errors());
-    }
 
     public function notNull(): bool
     {
@@ -83,5 +72,27 @@ class ProblemSQL implements Problem
     public function detachUser(int $id): Entity
     {
         return $this;
+    }
+
+    public function remove(): void
+    {
+        TableProblems::deleteAll(['id'=>$this->id]);
+    }
+
+    /**
+     * @param Form $form
+     * @return Entity
+     * @throws NotSavedRecord
+     * @throws NotValidatedFields
+     */
+    public function changeLineData(Form $form): Entity
+    {
+        $record = $this->record();
+        $fields = $form->validatedFields();
+        $record->setAttributes($fields, false);
+        if($record->save()) {
+            return $this;
+        }
+        throw new NotSavedRecord($record->getErrors());
     }
 }

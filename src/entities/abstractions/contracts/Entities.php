@@ -4,7 +4,11 @@
 namespace vloop\problems\entities\abstractions\contracts;
 
 
-interface Entities extends \Iterator
+use vloop\problems\entities\exceptions\NotSavedRecord;
+use vloop\problems\entities\exceptions\NotValidatedFields;
+use yii\web\NotFoundHttpException;
+
+interface Entities
 {
     /**
      * @return Entity[]
@@ -14,13 +18,15 @@ interface Entities extends \Iterator
     /**
      * @param Form $form - форма, которая выдает провалидированные данные
      * @return Entity - Проблема которую нужно решить
+     * @throws NotSavedRecord
+     * @throws NotValidatedFields
      */
-    public function addFromInput(Form $form): Entity;
-
-    public function remove(Entity $entity): bool ;
+    public function add(Form $form): Entity;
 
     /**
-     * @return Entity - Return the current element
-    */
-    public function current();
+     * @param int $id
+     * @return Entity
+     * @throws NotFoundHttpException
+     */
+    public function entity(int $id): Entity;
 }

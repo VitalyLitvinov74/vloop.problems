@@ -4,17 +4,17 @@
 namespace vloop\problems\entities\rest;
 
 
-use vloop\problems\entities\abstractions\AbstractException;
 use vloop\problems\entities\abstractions\contracts\Entities;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\abstractions\EntitiesCollection;
 use vloop\problems\entities\ErrorsByEntity;
-use vloop\problems\entities\exceptions\ValidateFieldsException;
+use vloop\problems\entities\exceptions\NotSavedRecord;
+use vloop\problems\entities\exceptions\NotValidatedFields;
 use yii\helpers\VarDumper;
 use yii\web\NotFoundHttpException;
 
-class RestEntities extends EntitiesCollection
+class RestEntities implements Entities
 {
     private $origType;
     private $origin;
@@ -59,30 +59,18 @@ class RestEntities extends EntitiesCollection
     /**
      * @param Form $form - форма, которая выдает провалидированные данные
      * @return Entity - Проблема которую нужно решить
+     * @throws NotValidatedFields
+     * @throws NotSavedRecord
      */
-    public function addFromInput(Form $form): Entity
+    public function add(Form $form): Entity
     {
         return $this->restEntity(
-            $this->origin->addFromInput($form)
+            $this->origin->add($form)
         );
     }
 
-    public function remove(Entity $entity): bool
+    public function entity(int $id):Entity
     {
-        return $this->origin->remove($entity);
-    }
-
-    public function valid()
-    {
-        //нужно делать через свой массив.
-        return isset($this->simpleList()[$this->position]);
-    }
-
-    /**
-     * @return Entity|RestEntity
-     */
-    public function current()
-    {
-        return $this->simpleList()[$this->position];
+        return $this->list()[$id];
     }
 }

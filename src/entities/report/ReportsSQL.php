@@ -30,7 +30,7 @@ class ReportsSQL implements Entities
      * @param Form $form - форма, которая выдает провалидированные данные
      * @return Entity - Проблема которую нужно решить
      */
-    public function addFromInput(Form $form): Entity
+    public function add(Form $form): Entity
     {
         $fields = $form->validatedFields();
         if($fields){

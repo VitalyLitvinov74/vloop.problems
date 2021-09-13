@@ -4,23 +4,20 @@
 namespace vloop\problems\controllers;
 
 use vloop\problems\entities\cache\CachedEntities;
-use vloop\problems\entities\exceptions\RestExceptions;
-use vloop\problems\entities\exceptions\ValidateFieldsException;
+use vloop\problems\entities\exceptions\NotValidatedFields;
 use vloop\problems\entities\forms\criteria\CriteriaIDEntity;
 use vloop\problems\entities\forms\criteria\CriteriaProblemsByDates;
-use vloop\problems\entities\forms\FormReport;
 use vloop\problems\entities\forms\inputed\AddProblemForm;
 use vloop\problems\entities\forms\inputed\ChangeStatusProblemForm;
 use vloop\problems\entities\forms\inputed\InputsForChangeReport;
 use vloop\problems\entities\problem\decorators\ProblemsByCriteriaForm;
 use vloop\problems\entities\problem\decorators\ProblemsByDates;
-use vloop\problems\entities\problem\NullProblem;
 use vloop\problems\entities\problem\ProblemsSQL;
-use vloop\problems\entities\report\ReportByCriteriaForm;
 use vloop\problems\entities\report\ReportSQL;
 use vloop\problems\entities\report\ReportsSQL;
 use vloop\problems\entities\rest\RestEntities;
 use vloop\problems\entities\rest\RestEntity;
+use vloop\problems\entities\rest\RestValidatedEntities;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\VarDumper;
@@ -75,12 +72,14 @@ class ProblemsController extends Controller
     public function actionAddProblem()
     {
         $problems =
-            new RestEntities(
-                new ProblemsSQL(),
-                'problem'
+            new RestValidatedEntities(
+                new RestEntities(
+                    new ProblemsSQL(),
+                    'problem'
+                )
             );
         return $problems
-            ->addFromInput(new AddProblemForm())
+            ->add(new AddProblemForm())
             ->printYourself();
     }
 
@@ -105,7 +104,7 @@ class ProblemsController extends Controller
     {
         $reports = new ReportsSQL();
         return $reports
-            ->addFromInput(new FormReport())
+            ->add(new FormReport())
             ->printYourself();
     }
 

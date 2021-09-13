@@ -6,7 +6,7 @@ namespace vloop\problems\entities\rest;
 
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
-use vloop\problems\entities\exceptions\ValidateFieldsException;
+use vloop\problems\entities\exceptions\NotValidatedFields;
 use yii\helpers\VarDumper;
 
 class RestEntity implements Entity
@@ -68,8 +68,8 @@ class RestEntity implements Entity
         return $this;
     }
 
-    public function notNull(): bool
+    public function remove(): void
     {
-        return $this->origin->notNull();
+        $this->origin->remove();
     }
 }

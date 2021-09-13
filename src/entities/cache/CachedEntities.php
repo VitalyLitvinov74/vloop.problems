@@ -8,7 +8,7 @@ use vloop\problems\entities\abstractions\contracts\Entities;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\abstractions\EntitiesCollection;
-use vloop\problems\entities\exceptions\ValidateFieldsException;
+use vloop\problems\entities\exceptions\NotValidatedFields;
 use yii\helpers\VarDumper;
 
 /**
@@ -42,9 +42,9 @@ class CachedEntities extends EntitiesCollection
      * @param Form $form - форма, которая выдает провалидированные данные
      * @return Entity - Проблема которую нужно решить
      */
-    public function addFromInput(Form $form): Entity
+    public function add(Form $form): Entity
     {
-        return $this->origin->addFromInput($form);
+        return $this->origin->add($form);
     }
 
     public function remove(Entity $entity): bool

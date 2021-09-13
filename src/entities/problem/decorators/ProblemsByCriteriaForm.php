@@ -11,7 +11,7 @@ use vloop\problems\entities\abstractions\contracts\Problem;
 use vloop\problems\entities\abstractions\contracts\Role;
 use vloop\problems\entities\abstractions\EntitiesCollection;
 use vloop\problems\entities\ErrorsByEntity;
-use vloop\problems\entities\exceptions\ValidateFieldsException;
+use vloop\problems\entities\exceptions\NotValidatedFields;
 use vloop\problems\entities\problem\ProblemSQL;
 use vloop\problems\tables\TableProblems;
 use yii\base\Exception;
@@ -54,9 +54,9 @@ class ProblemsByCriteriaForm extends EntitiesCollection
      * @param Form $form - форма, которая выдает провалидированные данные
      * @return Entity - Проблема которую нужно решить
      */
-    public function addFromInput(Form $form): Entity
+    public function add(Form $form): Entity
     {
-        return $this->origin->addFromInput($form);
+        return $this->origin->add($form);
     }
 
     public function remove(Entity $entity): bool

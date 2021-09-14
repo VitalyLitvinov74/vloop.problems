@@ -9,11 +9,14 @@ use vloop\problems\entities\exceptions\NotValidatedFields;
 use vloop\problems\entities\forms\criteria\CriteriaIDEntity;
 use vloop\problems\entities\forms\criteria\CriteriaProblemsByDates;
 use vloop\problems\entities\forms\inputed\AddProblemForm;
+use vloop\problems\entities\forms\inputed\AddReport;
+use vloop\problems\entities\forms\inputed\ChangeReportDescription;
 use vloop\problems\entities\forms\inputed\ChangeStatusProblemForm;
 use vloop\problems\entities\forms\inputed\InputsForChangeReport;
 use vloop\problems\entities\problem\decorators\ProblemsByCriteriaForm;
 use vloop\problems\entities\problem\decorators\ProblemsByDates;
 use vloop\problems\entities\problem\ProblemsSQL;
+use vloop\problems\entities\report\decorators\ReportsByCriteriaForm;
 use vloop\problems\entities\report\ReportSQL;
 use vloop\problems\entities\report\ReportsSQL;
 use vloop\problems\entities\rest\JsonApiEntities;
@@ -109,31 +112,64 @@ class ProblemsController extends Controller
             ->printYourself();
     }
 
+    public function actionReports(){
+        $reports =
+            new EntitiesWithExceptions(
+              new JsonApiEntities(
+                  new ReportsSQL(),
+                  'report'
+              )
+            );
+        return $reports->list();
+    }
+
     public function actionAddReport()
     {
-        $reports = new ReportsSQL();
+        $reports = new EntitiesWithExceptions(
+            new JsonApiEntities(
+                new ReportsSQL(),
+                'report'
+            )
+        );
         return $reports
-            ->add(new FormReport())
+            ->add(new AddReport())
             ->printYourself();
     }
 
     public function actionChangeReport()
     {
         $report =
-            new ReportByCriteriaForm(
-                new ReportsSQL(),
-                new CriteriaIDEntity()
+            new EntitiesWithExceptions(
+                new JsonApiEntities(
+                    new EntitiesWithResetIds(
+                        new CachedEntities(
+                            new ReportsByCriteriaForm(
+                                new ReportsSQL(),
+                                new CriteriaIDEntity()
+                            )
+                        )
+                    ),
+                    'problem'
+                )
             );
         return $report
-            ->changeLineData(new InputsForChangeReport())
+            ->entity(0)
+            ->changeLineData(new ChangeReportDescription())
             ->printYourself();
     }
 
     public function actionProblemsByDate()
     {
-        $problems = new ProblemsByDates(
-            new ProblemsSQL(),
-            new CriteriaProblemsByDates()
+        $problems =
+        new EntitiesWithExceptions(
+            new JsonApiEntities(
+                new CachedEntities(
+                    new ProblemsByCriteriaForm(
+                        new CriteriaProblemsByDates()
+                    )
+                ),
+                'problem'
+            )
         );
         return $problems->list();
     }

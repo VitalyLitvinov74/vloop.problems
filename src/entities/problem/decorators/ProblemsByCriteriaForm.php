@@ -34,6 +34,7 @@ class ProblemsByCriteriaForm extends AbstractProblems
     public function list(): array
     {
         $fields = $this->form->validatedFields();
+//        VarDumper::dump(TableProblems::find()->where($fields)->createCommand()->getRawSql());
         $all = TableProblems::find()->where($fields)->all();
         return $this->entities($all);
     }

@@ -9,9 +9,13 @@ use vloop\problems\entities\abstractions\contracts\EntitiesCollection;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\ErrorsByEntity;
+use vloop\problems\entities\exceptions\NotValidatedFields;
+use vloop\problems\entities\report\ReportSQL;
 use vloop\problems\tables\TableReports;
+use yii\helpers\VarDumper;
+use yii\web\NotFoundHttpException;
 
-class ReportsByCriteriaForm extends EntitiesCollection
+class ReportsByCriteriaForm implements Entities
 {
     private $form;
     private $origin;
@@ -23,27 +27,41 @@ class ReportsByCriteriaForm extends EntitiesCollection
 
     /**
      * @return Entity[]
+     * @throws NotValidatedFields
      */
     public function list(): array
     {
         $fiends = $this->form->validatedFields();
-        if($fiends){
-            TableReports::find()->where($fiends)->all();
+        $records = TableReports::find()->where($fiends)->all();
+        $entities = [];
+        foreach ($records as $record){
+            $entities[$record->id] = new ReportSQL($record->id);
         }
-        return [new ErrorsByEntity($this->form->errors())];
+        return $entities;
     }
 
     /**
      * @param Form $form - форма, которая выдает провалидированные данные
      * @return Entity - Проблема которую нужно решить
      */
-    public function addFromInput(Form $form): Entity
+    public function add(Form $form): Entity
     {
-        // TODO: Implement addFromInput() method.
+        return $this->origin->add($form);
     }
 
-    public function remove(Entity $entity): bool
+    /**
+     * @param int $id
+     * @return Entity
+     * @throws NotFoundHttpException
+     * @throws NotValidatedFields
+     */
+    public function entity(int $id): Entity
     {
-        // TODO: Implement remove() method.
+        $fields = $this->form->validatedFields();
+        $exist = TableReports::find()->where($fields)->andWhere(['id'=>$id])->exists();
+        if($exist){
+            return new ReportSQL($id);
+        }
+        throw new NotFoundHttpException("Отчет не найден.");
     }
 }

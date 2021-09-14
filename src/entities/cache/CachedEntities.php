@@ -43,8 +43,6 @@ class CachedEntities implements Entities
     /**
      * @param Form $form - форма, которая выдает провалидированные данные
      * @return Entity - Проблема которую нужно решить
-     * @throws NotValidatedFields
-     * @throws NotSavedRecord
      */
     public function add(Form $form): Entity
     {
@@ -54,7 +52,6 @@ class CachedEntities implements Entities
     /**
      * @param int $id
      * @return Entity
-     * @throws NotFoundHttpException
      */
     public function entity(int $id): Entity
     {

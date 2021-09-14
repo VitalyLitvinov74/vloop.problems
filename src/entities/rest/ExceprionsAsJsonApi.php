@@ -19,7 +19,7 @@ use yii\web\NotFoundHttpException;
  * Проверяет выполнение кода на ошибки,
  * если ошибки есть возвращает их в подготовленном формате для REST
  */
-class EntitiesWithExceptions implements Entities
+class ExceprionsAsJsonApi implements Entities
 {
     private $origin;
 
@@ -70,7 +70,7 @@ class EntitiesWithExceptions implements Entities
                 $this->origin->entity($id)
             );
         }catch (NotFoundHttpException $exception){
-            return new RestError(
+            return new ErrorAsJsonApi(
                 new DefaultExceptionAsEntity($exception->getName(), $exception->getMessage())
             );
         }catch (NotValidatedFields $exception){
@@ -80,7 +80,7 @@ class EntitiesWithExceptions implements Entities
 
     private function modelErrorsAsEntity(VloopException $except)
     {
-        return new RestError(
+        return new ErrorAsJsonApi(
             new ArrayErrorsAsEntity($except->errors())
         );
     }

@@ -48,7 +48,7 @@ class OneEntityWithExceptions implements Entity
     }
 
     private function restError(VloopException $exception){
-        return new RestError(
+        return new ErrorAsJsonApi(
             new ArrayErrorsAsEntity(
                 $exception->errors()
             )

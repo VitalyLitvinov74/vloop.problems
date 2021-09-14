@@ -5,28 +5,20 @@ namespace vloop\problems\controllers;
 
 use vloop\problems\entities\cache\CachedEntities;
 use vloop\problems\entities\EntitiesWithResetIds;
-use vloop\problems\entities\exceptions\NotValidatedFields;
 use vloop\problems\entities\forms\criteria\CriteriaIDEntity;
 use vloop\problems\entities\forms\criteria\CriteriaProblemsByDates;
 use vloop\problems\entities\forms\inputed\AddProblemForm;
 use vloop\problems\entities\forms\inputed\AddReport;
 use vloop\problems\entities\forms\inputed\ChangeReportDescription;
 use vloop\problems\entities\forms\inputed\ChangeStatusProblemForm;
-use vloop\problems\entities\forms\inputed\InputsForChangeReport;
 use vloop\problems\entities\problem\decorators\ProblemsByCriteriaForm;
-use vloop\problems\entities\problem\decorators\ProblemsByDates;
 use vloop\problems\entities\problem\ProblemsSQL;
 use vloop\problems\entities\report\decorators\ReportsByCriteriaForm;
-use vloop\problems\entities\report\ReportSQL;
 use vloop\problems\entities\report\ReportsSQL;
-use vloop\problems\entities\rest\JsonApiEntities;
-use vloop\problems\entities\rest\RestEntity;
-use vloop\problems\entities\rest\EntitiesWithExceptions;
-use Yii;
+use vloop\problems\entities\rest\EntitiesAsJsonApi;
+use vloop\problems\entities\rest\ExceprionsAsJsonApi;
 use yii\filters\AccessControl;
-use yii\helpers\VarDumper;
 use yii\rest\Controller;
-use yii\web\NotFoundHttpException;
 
 class ProblemsController extends Controller
 {
@@ -48,8 +40,8 @@ class ProblemsController extends Controller
     public function actionProblems()
     {
         $problems =
-            new EntitiesWithExceptions(
-                new JsonApiEntities(
+            new ExceprionsAsJsonApi(
+                new EntitiesAsJsonApi(
                     new CachedEntities(
                         new ProblemsSQL()
                     ),
@@ -63,8 +55,8 @@ class ProblemsController extends Controller
     public function actionProblem()
     {
         $problems =
-            new EntitiesWithExceptions(
-                new JsonApiEntities(
+            new ExceprionsAsJsonApi(
+                new EntitiesAsJsonApi(
                     new EntitiesWithResetIds(
                         new ProblemsByCriteriaForm(
                             new CriteriaIDEntity('get')
@@ -81,8 +73,8 @@ class ProblemsController extends Controller
     public function actionAddProblem()
     {
         $problems =
-            new EntitiesWithExceptions(
-                new JsonApiEntities(
+            new ExceprionsAsJsonApi(
+                new EntitiesAsJsonApi(
                     new ProblemsSQL(),
                     'problem'
                 )
@@ -96,8 +88,8 @@ class ProblemsController extends Controller
     public function actionChangeStatus()
     {
         $problems =
-            new EntitiesWithExceptions( //если поместить в середину, то программа не прерывается.
-                new JsonApiEntities( //с полями data
+            new ExceprionsAsJsonApi( //если поместить в середину, то программа не прерывается.
+                new EntitiesAsJsonApi( //с полями data
                     new EntitiesWithResetIds(
                         new ProblemsByCriteriaForm(
                             new CriteriaIDEntity()
@@ -114,8 +106,8 @@ class ProblemsController extends Controller
 
     public function actionReports(){
         $reports =
-            new EntitiesWithExceptions(
-              new JsonApiEntities(
+            new ExceprionsAsJsonApi(
+              new EntitiesAsJsonApi(
                   new ReportsSQL(),
                   'report'
               )
@@ -125,8 +117,8 @@ class ProblemsController extends Controller
 
     public function actionAddReport()
     {
-        $reports = new EntitiesWithExceptions(
-            new JsonApiEntities(
+        $reports = new ExceprionsAsJsonApi(
+            new EntitiesAsJsonApi(
                 new ReportsSQL(),
                 'report'
             )
@@ -139,8 +131,8 @@ class ProblemsController extends Controller
     public function actionChangeReport()
     {
         $report =
-            new EntitiesWithExceptions(
-                new JsonApiEntities(
+            new ExceprionsAsJsonApi(
+                new EntitiesAsJsonApi(
                     new EntitiesWithResetIds(
                         new CachedEntities(
                             new ReportsByCriteriaForm(
@@ -161,8 +153,8 @@ class ProblemsController extends Controller
     public function actionProblemsByDate()
     {
         $problems =
-        new EntitiesWithExceptions(
-            new JsonApiEntities(
+        new ExceprionsAsJsonApi(
+            new EntitiesAsJsonApi(
                 new CachedEntities(
                     new ProblemsByCriteriaForm(
                         new CriteriaProblemsByDates()

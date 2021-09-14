@@ -7,7 +7,7 @@ namespace vloop\problems\entities\rest;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
 
-class RestError implements Entity
+class ErrorAsJsonApi implements Entity
 {
     private $origin;
 

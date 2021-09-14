@@ -7,14 +7,12 @@ namespace vloop\problems\entities\rest;
 use vloop\problems\entities\abstractions\contracts\Entities;
 use vloop\problems\entities\abstractions\contracts\Entity;
 use vloop\problems\entities\abstractions\contracts\Form;
-use vloop\problems\entities\abstractions\EntitiesCollection;
-use vloop\problems\entities\ErrorsByEntity;
 use vloop\problems\entities\exceptions\NotSavedRecord;
 use vloop\problems\entities\exceptions\NotValidatedFields;
 use yii\helpers\VarDumper;
 use yii\web\NotFoundHttpException;
 
-class JsonApiEntities implements Entities
+class EntitiesAsJsonApi implements Entities
 {
     private $origType;
     private $origin;
@@ -47,9 +45,9 @@ class JsonApiEntities implements Entities
         return $data;
     }
 
-    private function restEntity(Entity $entity): RestEntity
+    private function restEntity(Entity $entity): EntityAsJsonApi
     {
-        return new RestEntity(
+        return new EntityAsJsonApi(
             $entity,
             $this->origType,
             $this->needleField
@@ -59,8 +57,6 @@ class JsonApiEntities implements Entities
     /**
      * @param Form $form - форма, которая выдает провалидированные данные
      * @return Entity - Проблема которую нужно решить
-     * @throws NotValidatedFields
-     * @throws NotSavedRecord
      */
     public function add(Form $form): Entity
     {

@@ -9,7 +9,7 @@ use vloop\problems\entities\abstractions\contracts\Form;
 use vloop\problems\entities\exceptions\NotValidatedFields;
 use yii\helpers\VarDumper;
 
-class RestEntity implements Entity
+class EntityAsJsonApi implements Entity
 {
     private $origin;
     private $needleFields;

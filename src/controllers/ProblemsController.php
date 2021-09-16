@@ -7,6 +7,7 @@ use vloop\problems\entities\cache\CachedEntities;
 use vloop\problems\entities\EntitiesWithResetIds;
 use vloop\problems\entities\forms\criteria\CriteriaIDEntity;
 use vloop\problems\entities\forms\criteria\CriteriaProblemsByDates;
+use vloop\problems\entities\forms\criteria\CriteriaReportByProblemId;
 use vloop\problems\entities\forms\inputed\AddProblemForm;
 use vloop\problems\entities\forms\inputed\AddReport;
 use vloop\problems\entities\forms\inputed\ChangeReportDescription;
@@ -164,5 +165,21 @@ class ProblemsController extends Controller
             )
         );
         return $problems->list();
+    }
+
+    public function actionReportByProblemId(){
+        $reports =
+            new ExceprionsAsJsonApi(
+                new EntitiesAsJsonApi(
+                    new EntitiesWithResetIds(
+                        new ReportsByCriteriaForm(
+                            new ReportsSQL(),
+                            new CriteriaReportByProblemId()
+                        )
+                    ),
+                    'report'
+                )
+            );
+        return $reports->entity(0)->printYourself();
     }
 }

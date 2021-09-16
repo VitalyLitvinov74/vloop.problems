@@ -31,6 +31,7 @@ class TableReports extends ActiveRecord
         return [
             [['user_id', 'problem_id', 'description'], 'required'],
             [['description', ], 'unique', 'targetAttribute' => ['problem_id', 'user_id', 'description']],
+            [['problem_id', ], 'unique', 'targetAttribute' => ['problem_id', 'user_id']],
             ['problem_id', 'exist', 'targetClass' => TableProblems::className(), 'targetAttribute' => 'id'],
 
         ];

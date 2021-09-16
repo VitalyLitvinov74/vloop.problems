@@ -49,6 +49,6 @@ class EntitiesWithResetIds implements Entities
         if(isset($this->list()[$id])){
             return $this->list()[$id];
         }
-        throw new NotFoundHttpException("Проблема не найдена");
+        throw new NotFoundHttpException("Сущность не найдена.");
     }
 }

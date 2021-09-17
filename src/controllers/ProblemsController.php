@@ -180,6 +180,8 @@ class ProblemsController extends Controller
                     'report'
                 )
             );
-        return $reports->entity(0)->printYourself();
+        return $reports
+            ->entity(0)
+            ->printYourself();
     }
 }

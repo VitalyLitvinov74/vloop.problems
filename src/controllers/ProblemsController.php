@@ -3,8 +3,10 @@
 
 namespace vloop\problems\controllers;
 
-use vloop\problems\entities\cache\CachedEntities;
-use vloop\problems\entities\EntitiesWithResetIds;
+use vloop\entities\decorators\CachedEntities;
+use vloop\entities\decorators\exceptions\HandledExceptionsOfEntities;
+use vloop\entities\decorators\ResetKeysOnListEntities;
+use vloop\entities\decorators\rest\jsonapi\JsonApiOfEntities;
 use vloop\problems\entities\forms\criteria\CriteriaIDEntity;
 use vloop\problems\entities\forms\criteria\CriteriaProblemsByDates;
 use vloop\problems\entities\forms\criteria\CriteriaReportByProblemId;
@@ -16,9 +18,10 @@ use vloop\problems\entities\problem\decorators\ProblemsByCriteriaForm;
 use vloop\problems\entities\problem\ProblemsSQL;
 use vloop\problems\entities\report\decorators\ReportsByCriteriaForm;
 use vloop\problems\entities\report\ReportsSQL;
-use vloop\problems\entities\rest\EntitiesAsJsonApi;
-use vloop\problems\entities\rest\ExceprionsAsJsonApi;
+use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\Json;
+use yii\helpers\VarDumper;
 use yii\rest\Controller;
 
 class ProblemsController extends Controller
@@ -26,6 +29,9 @@ class ProblemsController extends Controller
     public function behaviors()
     {
         $behaviors = parent::behaviors();
+        Yii::$app->request->parsers = [
+            'application/json' => 'yii\web\JsonParser',
+        ];
         $behaviors['access'] = [
             'class' => AccessControl::class,
             'rules' => [
@@ -41,13 +47,14 @@ class ProblemsController extends Controller
     public function actionProblems()
     {
         $problems =
-            new ExceprionsAsJsonApi(
-                new EntitiesAsJsonApi(
+            new JsonApiOfEntities(
+                new HandledExceptionsOfEntities(
+
                     new CachedEntities(
                         new ProblemsSQL()
-                    ),
-                    'problem'
-                )
+                    )
+                ),
+                'problem'
             );
         return $problems->list();
     }
@@ -56,15 +63,15 @@ class ProblemsController extends Controller
     public function actionProblem()
     {
         $problems =
-            new ExceprionsAsJsonApi(
-                new EntitiesAsJsonApi(
-                    new EntitiesWithResetIds(
+            new JsonApiOfEntities(
+                new HandledExceptionsOfEntities(
+                    new ResetKeysOnListEntities(
                         new ProblemsByCriteriaForm(
                             new CriteriaIDEntity('get')
                         )
-                    ),
-                    'problem'
-                )
+                    )
+                ),
+                'problem'
             );
         return $problems
             ->entity(0)
@@ -74,11 +81,11 @@ class ProblemsController extends Controller
     public function actionAddProblem()
     {
         $problems =
-            new ExceprionsAsJsonApi(
-                new EntitiesAsJsonApi(
-                    new ProblemsSQL(),
-                    'problem'
-                )
+            new JsonApiOfEntities(
+                new HandledExceptionsOfEntities(
+                    new ProblemsSQL()
+                ),
+                'problem'
             );
         return $problems
             ->add(new AddProblemForm())
@@ -88,16 +95,17 @@ class ProblemsController extends Controller
 
     public function actionChangeStatus()
     {
+
         $problems =
-            new ExceprionsAsJsonApi( //если поместить в середину, то программа не прерывается.
-                new EntitiesAsJsonApi( //с полями data
-                    new EntitiesWithResetIds(
+            new JsonApiOfEntities(
+                new HandledExceptionsOfEntities(
+                    new ResetKeysOnListEntities(
                         new ProblemsByCriteriaForm(
                             new CriteriaIDEntity()
                         )
-                    ),
-                    'problem'
-                )
+                    )
+                ),
+                'problem'
             );
         return $problems
             ->entity(0)
@@ -105,25 +113,27 @@ class ProblemsController extends Controller
             ->printYourself();
     }
 
-    public function actionReports(){
+    public function actionReports()
+    {
         $reports =
-            new ExceprionsAsJsonApi(
-              new EntitiesAsJsonApi(
-                  new ReportsSQL(),
-                  'report'
-              )
+            new JsonApiOfEntities(
+                new HandledExceptionsOfEntities(
+                    new ReportsSQL()
+                ),
+                'report'
             );
         return $reports->list();
     }
 
     public function actionAddReport()
     {
-        $reports = new ExceprionsAsJsonApi(
-            new EntitiesAsJsonApi(
-                new ReportsSQL(),
+        $reports =
+            new JsonApiOfEntities(
+                new HandledExceptionsOfEntities(
+                    new ReportsSQL()
+                ),
                 'report'
-            )
-        );
+            );
         return $reports
             ->add(new AddReport())
             ->printYourself();
@@ -132,18 +142,18 @@ class ProblemsController extends Controller
     public function actionChangeReport()
     {
         $report =
-            new ExceprionsAsJsonApi(
-                new EntitiesAsJsonApi(
-                    new EntitiesWithResetIds(
-                        new CachedEntities(
+            new JsonApiOfEntities(
+                new HandledExceptionsOfEntities(
+                    new CachedEntities(
+                        new ResetKeysOnListEntities(
                             new ReportsByCriteriaForm(
                                 new ReportsSQL(),
                                 new CriteriaIDEntity()
                             )
                         )
-                    ),
-                    'problem'
-                )
+                    )
+                ),
+                'problem'
             );
         return $report
             ->entity(0)
@@ -154,31 +164,32 @@ class ProblemsController extends Controller
     public function actionProblemsByDate()
     {
         $problems =
-        new ExceprionsAsJsonApi(
-            new EntitiesAsJsonApi(
-                new CachedEntities(
-                    new ProblemsByCriteriaForm(
-                        new CriteriaProblemsByDates()
+            new JsonApiOfEntities(
+                new HandledExceptionsOfEntities(
+                    new CachedEntities(
+                        new ProblemsByCriteriaForm(
+                            new CriteriaProblemsByDates()
+                        )
                     )
                 ),
                 'problem'
-            )
-        );
+            );
         return $problems->list();
     }
 
-    public function actionReportByProblemId(){
+    public function actionReportByProblemId()
+    {
         $reports =
-            new ExceprionsAsJsonApi(
-                new EntitiesAsJsonApi(
-                    new EntitiesWithResetIds(
+            new JsonApiOfEntities(
+                new HandledExceptionsOfEntities(
+                    new ResetKeysOnListEntities(
                         new ReportsByCriteriaForm(
                             new ReportsSQL(),
                             new CriteriaReportByProblemId()
                         )
-                    ),
-                    'report'
-                )
+                    )
+                ),
+                'report'
             );
         return $reports
             ->entity(0)

@@ -4,12 +4,11 @@
 namespace vloop\problems\entities\report;
 
 
-use vloop\problems\entities\abstractions\contracts\Entities;
-use vloop\problems\entities\abstractions\contracts\Entity;
-use vloop\problems\entities\abstractions\contracts\Form;
-use vloop\problems\entities\abstractions\contracts\Report;
-use vloop\problems\entities\exceptions\NotSavedRecord;
-use vloop\problems\entities\exceptions\NotValidatedFields;
+use vloop\entities\contracts\Entities;
+use vloop\entities\contracts\Entity;
+use vloop\entities\contracts\Form;
+use vloop\entities\exceptions\NotSavedData;
+use vloop\entities\exceptions\NotValidatedFields;
 use vloop\problems\tables\TableReports;
 use yii\web\NotFoundHttpException;
 
@@ -33,7 +32,7 @@ class ReportsSQL implements Entities
      * @param Form $form - форма, которая выдает провалидированные данные
      * @return Entity - Проблема которую нужно решить
      * @throws NotValidatedFields
-     * @throws NotSavedRecord
+     * @throws NotSavedData
      */
     public function add(Form $form): Entity
     {
@@ -42,7 +41,7 @@ class ReportsSQL implements Entities
         if($record->save()){
             return new ReportSQL($record->id);
         }
-        throw new NotSavedRecord($record->getErrors());
+        throw new NotSavedData($record->getErrors(), 422);
     }
 
     /**
@@ -57,5 +56,13 @@ class ReportsSQL implements Entities
             return new ReportSQL($id);
         }
         throw new NotFoundHttpException('Отчет не найден.');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isNull(): bool
+    {
+        return false;
     }
 }

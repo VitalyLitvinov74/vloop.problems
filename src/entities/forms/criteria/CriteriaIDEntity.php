@@ -2,7 +2,8 @@
 
 
 namespace vloop\problems\entities\forms\criteria;
-use vloop\problems\entities\abstractions\AbstractForm;
+
+use vloop\entities\yii2\AbstractForm;
 
 class CriteriaIDEntity extends AbstractForm
 {

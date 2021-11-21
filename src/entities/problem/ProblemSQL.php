@@ -3,18 +3,14 @@
 
 namespace vloop\problems\entities\problem;
 
-use vloop\problems\entities\abstractions\contracts\Entity;
-use vloop\problems\entities\abstractions\contracts\Form;
-use vloop\problems\entities\abstractions\contracts\Problem;
+use vloop\entities\contracts\Entity;
+use vloop\entities\contracts\Form;
 use vloop\problems\entities\abstractions\contracts\Role;
-use vloop\problems\entities\ErrorsByEntity;
 use vloop\problems\entities\exceptions\NotSavedRecord;
 use vloop\problems\entities\exceptions\NotValidatedFields;
 use vloop\problems\tables\TableProblems;
-use vloop\problems\tables\TableProblemsUsers;
-use yii\helpers\VarDumper;
 
-class ProblemSQL implements Problem
+class ProblemSQL implements Entity
 {
 
     private $id;
@@ -88,5 +84,13 @@ class ProblemSQL implements Problem
             return $this;
         }
         throw new NotSavedRecord($record->getErrors());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isNull(): bool
+    {
+        return false;
     }
 }

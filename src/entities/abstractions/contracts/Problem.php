@@ -4,6 +4,8 @@
 namespace vloop\problems\entities\abstractions\contracts;
 
 
+use vloop\entities\contracts\Entity;
+
 interface Problem extends Entity
 {
     /**

@@ -18,7 +18,8 @@
   ],
   "require": {
     "php": ">=7.1",
-    "yiisoft/yii2": "~2.0.0"
+    "yiisoft/yii2": "~2.0.0",
+    "vloop/entities": "dev-master"
   },
   "autoload": {
     "psr-4": {
@@ -29,6 +30,10 @@
     {
       "type": "composer",
       "url": "https://asset-packagist.org"
+    },
+    {
+      "type": "path",
+      "url": "../vloop.entities"
     }
   ]
 }

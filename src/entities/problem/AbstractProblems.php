@@ -4,14 +4,20 @@
 namespace vloop\problems\entities\problem;
 
 
-use vloop\problems\entities\abstractions\contracts\Entities;
-use vloop\problems\entities\abstractions\contracts\Entity;
-use vloop\problems\entities\abstractions\contracts\Form;
-use vloop\problems\entities\exceptions\NotSavedRecord;
+use vloop\entities\contracts\Entities;
+use vloop\entities\contracts\Entity;
+use vloop\entities\contracts\Form;
+use vloop\entities\exceptions\NotSavedData;
 use vloop\problems\tables\TableProblems;
 
 abstract class AbstractProblems implements Entities
 {
+    /**
+     * @param Form $form
+     * @return Entity
+     * @throws NotSavedData
+     * @throws \vloop\entities\exceptions\NotValidatedFields
+     */
     public function add(Form $form): Entity
     {
         $fields = $form->validatedFields();
@@ -19,6 +25,6 @@ abstract class AbstractProblems implements Entities
         if($record->save()){
             return new ProblemSQL($record->id);
         }
-        throw new NotSavedRecord($record->getErrors(),422);
+        throw new NotSavedData($record->getErrors(),422);
     }
 }

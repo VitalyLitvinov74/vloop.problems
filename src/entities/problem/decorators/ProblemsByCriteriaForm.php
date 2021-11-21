@@ -4,14 +4,8 @@
 namespace vloop\problems\entities\problem\decorators;
 
 
-use vloop\problems\entities\abstractions\contracts\Entities;
-use vloop\problems\entities\abstractions\contracts\Entity;
-use vloop\problems\entities\abstractions\contracts\Form;
-use vloop\problems\entities\abstractions\contracts\Problem;
-use vloop\problems\entities\abstractions\contracts\Role;
-use vloop\problems\entities\abstractions\EntitiesCollection;
-use vloop\problems\entities\ErrorsByEntity;
-use vloop\problems\entities\exceptions\NotValidatedFields;
+use vloop\entities\contracts\Entity;
+use vloop\entities\contracts\Form;
 use vloop\problems\entities\problem\AbstractProblems;
 use vloop\problems\entities\problem\ProblemSQL;
 use vloop\problems\tables\TableProblems;
@@ -29,12 +23,11 @@ class ProblemsByCriteriaForm extends AbstractProblems
 
     /**
      * @return Entity[]
-     * @throws NotValidatedFields
+     * @throws \vloop\entities\exceptions\NotValidatedFields
      */
     public function list(): array
     {
         $fields = $this->form->validatedFields();
-//        VarDumper::dump(TableProblems::find()->where($fields)->createCommand()->getRawSql());
         $all = TableProblems::find()->where($fields)->all();
         return $this->entities($all);
     }
@@ -55,7 +48,7 @@ class ProblemsByCriteriaForm extends AbstractProblems
      * @param int $id
      * @return Entity
      * @throws NotFoundHttpException
-     * @throws NotValidatedFields
+     * @throws \vloop\entities\exceptions\NotValidatedFields
      * id не берутся с оригинала, т.к. тут наложены ограничения на выборку оригинала.
      */
     public function entity(int $id): Entity
@@ -64,5 +57,13 @@ class ProblemsByCriteriaForm extends AbstractProblems
             return $this->list()[$id];
         }
         throw new NotFoundHttpException("Проблема не найдена");
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isNull(): bool
+    {
+        return false;
     }
 }

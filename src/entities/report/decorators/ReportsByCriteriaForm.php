@@ -4,11 +4,9 @@
 namespace vloop\problems\entities\report\decorators;
 
 
-use vloop\problems\entities\abstractions\contracts\Entities;
-use vloop\problems\entities\abstractions\contracts\EntitiesCollection;
-use vloop\problems\entities\abstractions\contracts\Entity;
-use vloop\problems\entities\abstractions\contracts\Form;
-use vloop\problems\entities\ErrorsByEntity;
+use vloop\entities\contracts\Entities;
+use vloop\entities\contracts\Entity;
+use vloop\entities\contracts\Form;
 use vloop\problems\entities\exceptions\NotValidatedFields;
 use vloop\problems\entities\report\ReportSQL;
 use vloop\problems\tables\TableReports;
@@ -28,6 +26,7 @@ class ReportsByCriteriaForm implements Entities
     /**
      * @return Entity[]
      * @throws NotValidatedFields
+     * @throws \vloop\entities\exceptions\NotValidatedFields
      */
     public function list(): array
     {
@@ -54,6 +53,7 @@ class ReportsByCriteriaForm implements Entities
      * @return Entity
      * @throws NotFoundHttpException
      * @throws NotValidatedFields
+     * @throws \vloop\entities\exceptions\NotValidatedFields
      */
     public function entity(int $id): Entity
     {
@@ -63,5 +63,13 @@ class ReportsByCriteriaForm implements Entities
             return new ReportSQL($id);
         }
         throw new NotFoundHttpException("Отчет не найден.");
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isNull(): bool
+    {
+        // TODO: Implement isNull() method.
     }
 }

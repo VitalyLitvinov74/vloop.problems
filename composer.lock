@@ -4,14 +4,14 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07d2c66fd4c7dd4b68510fe13dd8b0d5",
+    "content-hash": "e4a3bb77b305da4ef458b12a8e04de74",
     "packages": [
         {
             "name": "bower-asset/inputmask",
             "version": "3.3.11",
             "source": {
                 "type": "git",
-                "url": "git@github.com:RobinHerbots/Inputmask.git",
+                "url": "https://github.com/RobinHerbots/Inputmask.git",
                 "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b"
             },
             "dist": {
@@ -250,6 +250,45 @@
             "time": "2020-10-15T08:29:30+00:00"
         },
         {
+            "name": "vloop/entities",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "../vloop.entities",
+                "reference": "cb6d1827fd2f45bed11c803b5eb19e1742c0b25e"
+            },
+            "require": {
+                "php": ">=7.1",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "vloop\\entities\\": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vitaly Litvinov",
+                    "email": "support@tirrs.ru",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Package",
+            "keywords": [
+                "module",
+                "problems",
+                "tasks",
+                "yii2"
+            ],
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "yiisoft/yii2",
             "version": "2.0.43",
             "source": {
@@ -451,7 +490,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "vloop/entities": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

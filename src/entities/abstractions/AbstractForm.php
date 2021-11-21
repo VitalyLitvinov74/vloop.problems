@@ -4,7 +4,7 @@
 namespace vloop\problems\entities\abstractions;
 
 
-use vloop\problems\entities\abstractions\contracts\Form;
+use vloop\entities\contracts\Form;
 use vloop\problems\entities\exceptions\NotValidatedFields;
 use Yii;
 use yii\base\Model;

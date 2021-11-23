@@ -7,6 +7,7 @@ use vloop\entities\decorators\CachedEntities;
 use vloop\entities\decorators\exceptions\HandledExceptionsOfEntities;
 use vloop\entities\decorators\ResetKeysOnListEntities;
 use vloop\entities\decorators\rest\jsonapi\JsonApiOfEntities;
+use vloop\entities\yii2\I18nOfFieldsEntities;
 use vloop\problems\entities\forms\criteria\CriteriaIDEntity;
 use vloop\problems\entities\forms\criteria\CriteriaProblemsByDates;
 use vloop\problems\entities\forms\criteria\CriteriaReportByProblemId;
@@ -49,9 +50,10 @@ class ProblemsController extends Controller
         $problems =
             new JsonApiOfEntities(
                 new HandledExceptionsOfEntities(
-
-                    new CachedEntities(
-                        new ProblemsSQL()
+                    new I18nOfFieldsEntities(
+                        new CachedEntities(
+                            new ProblemsSQL()
+                        )
                     )
                 ),
                 'problem'
@@ -66,8 +68,10 @@ class ProblemsController extends Controller
             new JsonApiOfEntities(
                 new HandledExceptionsOfEntities(
                     new ResetKeysOnListEntities(
-                        new ProblemsByCriteriaForm(
-                            new CriteriaIDEntity('get')
+                        new I18nOfFieldsEntities(
+                            new ProblemsByCriteriaForm(
+                                new CriteriaIDEntity('get')
+                            )
                         )
                     )
                 ),
@@ -76,6 +80,27 @@ class ProblemsController extends Controller
         return $problems
             ->entity(0)
             ->printYourself();
+    }
+
+    public function actionDeleteProblem()
+    {
+        VarDumper::dump(Yii::$app->request->post());
+        $problems =
+            new JsonApiOfEntities(
+                new HandledExceptionsOfEntities(
+                    new ResetKeysOnListEntities(
+                        new I18nOfFieldsEntities(
+                            new ProblemsByCriteriaForm(
+                                new CriteriaIDEntity()
+                            )
+                        )
+                    )
+                ),
+                'problem'
+            );
+        $problems
+            ->entity(0)
+            ->remove();
     }
 
     public function actionAddProblem()
@@ -90,6 +115,25 @@ class ProblemsController extends Controller
         return $problems
             ->add(new AddProblemForm())
             ->printYourself();
+    }
+
+    public function actionUpdateProblem()
+    {
+        $problem = new HandledExceptionsOfEntities(
+            new JsonApiOfEntities(
+                new ResetKeysOnListEntities(
+                    new ProblemsByCriteriaForm(
+                        new CriteriaIDEntity('post')
+                    ),
+                ),
+                'problem'
+            )
+        );
+        return $problem
+            ->entity(0)
+            ->changeLineData(new AddProblemForm())
+            ->printYourself();
+
     }
 
 

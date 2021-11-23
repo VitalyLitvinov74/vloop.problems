@@ -5,7 +5,7 @@ namespace vloop\problems\entities\abstractions;
 
 
 use vloop\entities\contracts\Form;
-use vloop\problems\entities\exceptions\NotValidatedFields;
+use vloop\entities\exceptions\NotValidatedFields;
 use Yii;
 use yii\base\Model;
 use yii\helpers\VarDumper;
@@ -38,6 +38,6 @@ abstract class AbstractForm extends Model implements Form
                 return $this->getAttributes();
             }
         }
-        throw new NotValidatedFields($this->getErrors(), 400);
+        throw new NotValidatedFields($this->getErrors(), 409);
     }
 }

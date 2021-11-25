@@ -6,6 +6,7 @@ namespace vloop\problems\entities\problem\decorators;
 
 use vloop\entities\contracts\Entity;
 use vloop\entities\contracts\Form;
+use vloop\entities\exceptions\NotValidatedFields;
 use vloop\problems\entities\problem\AbstractProblems;
 use vloop\problems\entities\problem\ProblemSQL;
 use vloop\problems\tables\TableProblems;
@@ -23,7 +24,7 @@ class ProblemsByCriteriaForm extends AbstractProblems
 
     /**
      * @return Entity[]
-     * @throws \vloop\entities\exceptions\NotValidatedFields
+     * @throws NotValidatedFields
      */
     public function list(): array
     {
@@ -48,7 +49,7 @@ class ProblemsByCriteriaForm extends AbstractProblems
      * @param int $id
      * @return Entity
      * @throws NotFoundHttpException
-     * @throws \vloop\entities\exceptions\NotValidatedFields
+     * @throws NotValidatedFields
      * id не берутся с оригинала, т.к. тут наложены ограничения на выборку оригинала.
      */
     public function entity(int $id): Entity

@@ -5,10 +5,12 @@ namespace vloop\problems\entities\problem;
 
 use vloop\entities\contracts\Entity;
 use vloop\entities\contracts\Form;
+use vloop\entities\exceptions\NotSavedData;
+use vloop\entities\exceptions\NotValidatedFields;
 use vloop\problems\entities\abstractions\contracts\Role;
-use vloop\problems\entities\exceptions\NotSavedRecord;
-use vloop\problems\entities\exceptions\NotValidatedFields;
 use vloop\problems\tables\TableProblems;
+use yii\db\ActiveRecord;
+use yii\helpers\VarDumper;
 
 class ProblemSQL implements Entity
 {
@@ -31,7 +33,7 @@ class ProblemSQL implements Entity
     }
 
     /**
-     * @return null|array|bool|TableProblems|\yii\db\ActiveRecord
+     * @return null|array|bool|TableProblems|ActiveRecord
      */
     private function record(){
         if($this->record !== false){
@@ -72,7 +74,7 @@ class ProblemSQL implements Entity
     /**
      * @param Form $form
      * @return Entity
-     * @throws NotSavedRecord
+     * @throws NotSavedData
      * @throws NotValidatedFields
      */
     public function changeLineData(Form $form): Entity
@@ -83,7 +85,7 @@ class ProblemSQL implements Entity
         if($record->save()) {
             return $this;
         }
-        throw new NotSavedRecord($record->getErrors());
+        throw new NotSavedData($record->getErrors(), 422);
     }
 
     /**

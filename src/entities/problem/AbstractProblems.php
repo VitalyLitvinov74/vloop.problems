@@ -8,6 +8,7 @@ use vloop\entities\contracts\Entities;
 use vloop\entities\contracts\Entity;
 use vloop\entities\contracts\Form;
 use vloop\entities\exceptions\NotSavedData;
+use vloop\entities\exceptions\NotValidatedFields;
 use vloop\problems\tables\TableProblems;
 
 abstract class AbstractProblems implements Entities
@@ -16,7 +17,7 @@ abstract class AbstractProblems implements Entities
      * @param Form $form
      * @return Entity
      * @throws NotSavedData
-     * @throws \vloop\entities\exceptions\NotValidatedFields
+     * @throws NotValidatedFields
      */
     public function add(Form $form): Entity
     {

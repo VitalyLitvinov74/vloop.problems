@@ -15,6 +15,7 @@ use vloop\problems\entities\forms\inputed\AddProblemForm;
 use vloop\problems\entities\forms\inputed\AddReport;
 use vloop\problems\entities\forms\inputed\ChangeReportDescription;
 use vloop\problems\entities\forms\inputed\ChangeStatusProblemForm;
+use vloop\problems\entities\forms\inputed\UpdateProblemForm;
 use vloop\problems\entities\problem\decorators\ProblemsByCriteriaForm;
 use vloop\problems\entities\problem\ProblemsSQL;
 use vloop\problems\entities\report\decorators\ReportsByCriteriaForm;
@@ -84,7 +85,6 @@ class ProblemsController extends Controller
 
     public function actionDeleteProblem()
     {
-        VarDumper::dump(Yii::$app->request->post());
         $problems =
             new JsonApiOfEntities(
                 new HandledExceptionsOfEntities(
@@ -115,23 +115,25 @@ class ProblemsController extends Controller
         return $problems
             ->add(new AddProblemForm())
             ->printYourself();
+
     }
 
     public function actionUpdateProblem()
     {
-        $problem = new HandledExceptionsOfEntities(
+        $problem =
             new JsonApiOfEntities(
-                new ResetKeysOnListEntities(
-                    new ProblemsByCriteriaForm(
-                        new CriteriaIDEntity('post')
-                    ),
+                new HandledExceptionsOfEntities(
+                    new ResetKeysOnListEntities(
+                        new ProblemsByCriteriaForm(
+                            new CriteriaIDEntity('post')
+                        )
+                    )
                 ),
                 'problem'
-            )
-        );
+            );
         return $problem
             ->entity(0)
-            ->changeLineData(new AddProblemForm())
+            ->changeLineData(new UpdateProblemForm())
             ->printYourself();
 
     }
